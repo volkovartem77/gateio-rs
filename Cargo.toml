@@ -1,0 +1,27 @@
+[package]
+name = "gateio-rs"
+version = "0.1.0"
+edition = "2024"
+authors     = ["Artem Volkov"]
+description = "Короткое описание: что делает библиотека."
+license     = "MIT OR Apache-2.0"
+readme      = "README.md"
+repository  = "https://github.com/you/my_cool_lib"
+homepage    = "https://github.com/you/my_cool_lib"
+keywords    = ["example", "template"]
+categories  = ["development-tools"]
+# TODO:
+
+[features]
+default   = ["rt-tokio"]           # ← чтобы не путаться с ключевым словом async
+rt-tokio  = ["tokio", "reqwest"]   # асинхронный вариант
+blocking  = ["reqwest/blocking"]   # синхронный вариант
+
+[dependencies]
+tokio = { version = "1", optional = true, features = ["rt-multi-thread", "macros"] }
+serde = { version = "1", features = ["derive"] }
+thiserror = "2.0.12"
+reqwest = { version = "0.12.15", optional = true, default-features = false, features = ["json"] }
+serde_json = "1.0.140"
+async-trait = "0.1.88"
+
