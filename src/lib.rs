@@ -1,45 +1,25 @@
-//! Gate.io client library (каркас).
+//! Gate.io Rust SDK — асинхронный и синхронный HTTP-клиент
 //!
 //! ```rust,no_run
-//! use gateio_rs::Client;
-//!
-//! // асинхронный пример (фича "async" по умолчанию)
-//! # #[tokio::main]
-//! # async fn main() -> gateio_rs::Result<()> {
-//! let cli = Client::new("API_KEY", "API_SECRET");
-//! let price = cli.ticker("BTC_USDT").await?;
-//! println!("btc/usdt = {price}");
-//! # Ok(())
-//! # }
 //! ```
+//!
+//! The following optional features are available:
+//!
+//! * `enable-ureq`: For a blocking http client powered by [`ureq`](https://docs.rs/ureq/2.4.0/ureq/).
+//! * `enable-hyper`: For a non-blocking http client powered by [`hyper`](https://docs.rs/hyper/0.14.16/hyper/).
+//!
 
 #![warn(missing_docs)]
 
-mod error;
-pub use error::{Error, Result};
+mod utils;
+mod version;
 
-pub mod client;
-pub use client::Client;
+pub mod api;
+pub mod http;
 
-//
-// —--- Публичные трейты  ---—
-//
+#[cfg(feature = "enable-hyper")]
+pub mod hyper;
 
-/// Асинхронный интерфейс к Gate.io.
-///
-/// Доступен, когда активен feature **`async`** (включён по умолчанию).
-#[cfg(feature = "rt-tokio")]
-#[async_trait::async_trait]
-pub trait GateClientAsync {
-    /// Получить текущий тикер для торговой пары, например `"BTC_USDT"`.
-    async fn ticker(&self, symbol: &str) -> Result<f64>;
-}
+#[cfg(feature = "enable-ureq")]
+pub mod ureq;
 
-/// Блокирующий (sync) интерфейс.
-///
-/// Подключается фичей **`blocking`**.
-#[cfg(feature = "blocking")]
-pub trait GateClientSync {
-    /// Синхронная версия `ticker`.
-    fn ticker(&self, symbol: &str) -> Result<f64>;
-}

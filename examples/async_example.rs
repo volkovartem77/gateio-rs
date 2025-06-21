@@ -1,16 +1,20 @@
-// examples/async_example.rs
-
-use gateio_rs::Client;
-use tokio; // убедитесь, что в Cargo.toml стоит `tokio` в секции [dependencies] для фичи rt-tokio
+use gateio_rs::{
+    hyper::GateHttpClient,
+    api::spot::get_ticker::GetTicker,
+    http::request::Credentials,
+};
 
 #[tokio::main]
-async fn main() -> gateio_rs::Result<()> {
-    // Ключи можно пустые, мы мокаем результат
-    let client = Client::new("", "");
+async fn main() -> anyhow::Result<()> {
+    let credentials = Credentials::from_hmac("your-api-key", "your-secret");
 
-    // вызываем асинхронно
-    let price = client.ticker("BTC_USDT").await?;
-    println!("→ async price = {price}");
+    let client = GateHttpClient::default().credentials(credentials);
+
+    let request = GetTicker::new().symbol("BTC_USDT").timezone("utc8");
+
+    let response = client.send(request).await?;
+
+    println!("{:#}", response.into_body_str().await?);
 
     Ok(())
 }
