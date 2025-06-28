@@ -1,10 +1,8 @@
 
 
-// TODO: делать этот файл
-//  идея в том что бы сделать объект Order (api/spot/order.rs)
-//  и юзер может создавать свои ордера
-//  а эта функция будет принимать на вход Vec<Order> и собирать payload
-//  и надо затестить это все
+// TODO: fix price orders: INVALID_PARAM_VALUE
+//  - get_price_orders
+//  - create_price_orders
 
 // TODO:  non String parameters
 //  но надо проверить будут ли они реально работать или будет ошибка

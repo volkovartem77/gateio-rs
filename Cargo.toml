@@ -41,3 +41,36 @@ ureq = { version = "2.4.0", optional = true }   # TODO: попробовать �
 
 anyhow = "1.0.98"
 hex = "0.4.3"
+dotenv = "0.15.0"
+
+[[example]]
+name = "get_open_orders"
+path = "examples/sync/get_open_orders.rs"
+
+[[example]]
+name = "get_orders"
+path = "examples/sync/get_orders.rs"
+
+[[example]]
+name = "get_order"
+path = "examples/sync/get_order.rs"
+
+[[example]]
+name = "cancel_batch_orders"
+path = "examples/sync/cancel_batch_orders.rs"
+
+[[example]]
+name = "get_my_trades"
+path = "examples/sync/get_my_trades.rs"
+
+[[example]]
+name = "get_fee"
+path = "examples/sync/get_fee.rs"
+
+[[example]]
+name = "create_price_order"
+path = "examples/sync/create_price_order.rs"
+
+[[example]]
+name = "get_price_orders"
+path = "examples/sync/get_price_orders.rs"
