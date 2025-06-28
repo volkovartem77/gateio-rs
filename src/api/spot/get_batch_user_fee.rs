@@ -1,4 +1,3 @@
-use serde_json::{Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 pub struct GetBatchUserFee {
@@ -32,15 +31,11 @@ impl From<GetBatchUserFee> for Request {
         //  а эта функция будет принимать на вход Vec<Order> и собирать payload
         //  и надо затестить это все
 
-        let payload = Map::new();
-
-        let payload_json = Value::Object(payload);
-
         Request {
             method: Method::Get,
             path: "/api/v4/spot/batch_fee".into(),
             params,
-            payload: payload_json.to_string(),
+            payload: "".to_string(),
             x_gate_exp_time: None,
             credentials: request.credentials,
             sign: true,

@@ -1,4 +1,3 @@
-use serde_json::{Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 pub struct GetAccountBook {
@@ -99,15 +98,11 @@ impl From<GetAccountBook> for Request {
             params.push(("code".into(), code.to_string()));
         }
 
-        let payload = Map::new();
-
-        let payload_json = Value::Object(payload);
-
         Request {
             method: Method::Get,
             path: "/api/v4/spot/account_book".into(),
             params,
-            payload: payload_json.to_string(),
+            payload: "".to_string(),
             x_gate_exp_time: None,
             credentials: request.credentials,
             sign: true,

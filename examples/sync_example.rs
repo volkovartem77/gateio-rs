@@ -2,7 +2,7 @@ use serde_json::{json, Value};
 use gateio_rs::{
     ureq::GateHttpClient,                // синхронный клиент на базе ureq
 };
-use gateio_rs::api::spot::{create_order, get_currency_pair, get_currency_pairs, get_ticker};
+use gateio_rs::api::spot::{create_order, get_account, get_account_book, get_currency_pair, get_currency_pairs, get_ticker};
 use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
@@ -19,7 +19,10 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     //     .currency_pair("BTC_USDT")
     //     .timezone("utc8");
 
-    // let req = get_account();//.currency("USDT");
+    let req = get_account();//.currency("USDT");
+    // let req = get_ticker()
+    //     .currency_pair("BTC_USDT")
+    //     .timezone("utc8");
 
     // POST запрос с параметрами
     // let req = create_order("LTC_USDT", "buy", "0.04").price("84.2").x_gate_exp_time(1750133608123);
@@ -29,7 +32,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     // let req = create_order("DUREV_USDT", "sell", "1400").order_type("market");
 
     // let req = get_currency_pairs();
-    let req = get_currency_pair("LTC_USDT");
+    // let req = get_currency_pair("LTC_USDT");
 
     // let req = cancel_order("860626791967", "ADA_USDT");
     // let req = amend_order("862872836139", "ADA_USDT").price("0.53");

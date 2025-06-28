@@ -1,4 +1,3 @@
-use serde_json::{Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 pub struct GetCandlesticks {
@@ -70,16 +69,11 @@ impl From<GetCandlesticks> for Request {
             params.push(("interval".into(), interval.to_string()));
         }
 
-        let payload = Map::new();
-
-        let payload_json = Value::Object(payload);
-
-
         Request {
             method: Method::Get,
             path: "/api/v4/spot/candlesticks".into(),
             params,
-            payload: payload_json.to_string(),
+            payload: "".to_string(),
             x_gate_exp_time: None,
             credentials: request.credentials,
             sign: false,

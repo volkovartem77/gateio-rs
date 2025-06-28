@@ -32,15 +32,11 @@ impl From<GetAccount> for Request {
             params.push(("currency".into(), currency));
         }
 
-        let payload = Map::new();
-
-        let payload_json = Value::Object(payload);
-
         Request {
             method: Method::Get,
             path: "/api/v4/spot/accounts".into(),
             params,
-            payload: payload_json.to_string(),
+            payload: "".to_string(),
             x_gate_exp_time: None,
             credentials: request.credentials,
             sign: true,
