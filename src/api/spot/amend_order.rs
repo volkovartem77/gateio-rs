@@ -1,3 +1,4 @@
+use serde_json::{json, Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 /// # Detailed descriptions
@@ -82,36 +83,33 @@ impl AmendOrder {
 impl From<AmendOrder> for Request {
     fn from(request: AmendOrder) -> Request {
         let mut params = Vec::new();
+        let mut payload = Map::new();
 
-        let mut payload = vec![
-            ("currency_pair".to_owned(), request.currency_pair),
-        ];
+        payload.insert("currency_pair".to_string(), json!(request.currency_pair));
 
         if let Some(account) = request.account {
-            payload.push(("account".into(), account.to_string()));
+            payload.insert("account".to_string(), json!(account));
         }
 
         if let Some(amount) = request.amount {
-            payload.push(("amount".into(), amount.to_string()));
-        }
-
-        if let Some(price) = request.price {
-            payload.push(("price".into(), price.to_string()));
+            payload.insert("amount".to_string(), json!(amount));
         }
 
         if let Some(amend_text) = request.amend_text {
-            payload.push(("amend_text".into(), amend_text.to_string()));
+            payload.insert("amend_text".to_string(), json!(amend_text));
         }
 
         if let Some(action_mode) = request.action_mode {
-            payload.push(("action_mode".into(), action_mode.to_string()));
+            payload.insert("action_mode".to_string(), json!(action_mode));
         }
+
+        let payload_json = Value::Object(payload);
 
         Request {
             method: Method::Patch,
             path: format!("/api/v4/spot/orders/{}", request.order_id).into(),
             params,
-            payload,
+            payload: payload_json.to_string(),
             x_gate_exp_time: request.x_gate_exp_time,
             credentials: request.credentials,
             sign: true,

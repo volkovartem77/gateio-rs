@@ -1,3 +1,4 @@
+use serde_json::{json, Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 /// # Detailed descriptions
@@ -166,58 +167,59 @@ impl CreateOrder {
 impl From<CreateOrder> for Request {
     fn from(request: CreateOrder) -> Request {
         let mut params = Vec::new();
+        let mut payload = Map::new();
 
-        let mut payload = vec![
-            ("currency_pair".to_owned(), request.currency_pair),
-            ("side".to_owned(), request.side),
-            ("amount".to_owned(), request.amount),
-        ];
+        payload.insert("currency_pair".to_string(), json!(request.currency_pair));
+        payload.insert("side".to_string(), json!(request.side));
+        payload.insert("amount".to_string(), json!(request.amount));
 
         if let Some(text) = request.text {
-            payload.push(("text".into(), text.to_string()));
+            payload.insert("text".to_string(), json!(text));
         }
 
         if let Some(order_type) = request.order_type {
-            payload.push(("type".into(), order_type.to_string()));
+            payload.insert("order_type".to_string(), json!(order_type));
         }
 
         if let Some(account) = request.account {
-            payload.push(("account".into(), account.to_string()));
+            payload.insert("account".to_string(), json!(account));
         }
 
         if let Some(price) = request.price {
-            payload.push(("price".into(), price.to_string()));
+            payload.insert("price".to_string(), json!(price));
         }
 
         if let Some(time_in_force) = request.time_in_force {
-            payload.push(("time_in_force".into(), time_in_force.to_string()));
+            payload.insert("time_in_force".to_string(), json!(time_in_force));
         }
 
         if let Some(iceberg) = request.iceberg {
-            payload.push(("iceberg".into(), iceberg.to_string()));
+            payload.insert("iceberg".to_string(), json!(iceberg));
         }
 
         if let Some(auto_borrow) = request.auto_borrow {
-            payload.push(("auto_borrow".into(), auto_borrow.to_string()));
+            payload.insert("auto_borrow".to_string(), json!(auto_borrow));
         }
 
         if let Some(auto_repay) = request.auto_repay {
-            payload.push(("auto_repay".into(), auto_repay.to_string()));
+            payload.insert("auto_repay".to_string(), json!(auto_repay));
         }
 
         if let Some(stp_act) = request.stp_act {
-            payload.push(("stp_act".into(), stp_act.to_string()));
+            payload.insert("stp_act".to_string(), json!(stp_act));
         }
 
         if let Some(action_mode) = request.action_mode {
-            payload.push(("action_mode".into(), action_mode.to_string()));
+            payload.insert("action_mode".to_string(), json!(action_mode));
         }
+
+        let payload_json = Value::Object(payload);
 
         Request {
             method: Method::Post,
             path: "/api/v4/spot/orders".into(),
             params,
-            payload,
+            payload: payload_json.to_string(),
             x_gate_exp_time: request.x_gate_exp_time,
             credentials: request.credentials,
             sign: true,

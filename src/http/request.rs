@@ -5,7 +5,7 @@ pub struct Request {
     pub(crate) method: Method,
     pub(crate) path: String,
     pub(crate) params: Vec<(String, String)>,
-    pub(crate) payload: Vec<(String, String)>,
+    pub(crate) payload: String,
     pub(crate) x_gate_exp_time: Option<u128>,
     pub(crate) credentials: Option<Credentials>,
     pub(crate) sign: bool,
@@ -21,7 +21,7 @@ impl Request {
     pub fn params(&self) -> &[(String, String)] {
         &self.params
     }
-    pub fn payload(&self) -> &[(String, String)] {
+    pub fn payload(&self) -> &str {
         &self.payload
     }
     pub fn x_gate_exp_time(&self) -> &Option<u128> {
@@ -43,7 +43,7 @@ pub struct RequestBuilder {
     method: Method,
     path: String,
     params: Vec<(String, String)>,
-    payload: Vec<(String, String)>,
+    payload: String,
     credentials: Option<Credentials>,
     x_gate_exp_time: Option<u128>,
     sign: bool,
@@ -55,7 +55,7 @@ impl RequestBuilder {
             method,
             path: path.to_owned(),
             params: vec![],
-            payload: vec![],
+            payload: "".to_owned(),
             x_gate_exp_time: None,
             credentials: None,
             sign: false,
@@ -73,12 +73,8 @@ impl RequestBuilder {
         );
         self
     }
-    pub fn payload<'a>(mut self, payload: impl IntoIterator<Item=(&'a str, &'a str)>) -> Self {
-        self.payload.extend(
-            payload
-                .into_iter()
-                .map(|param| (param.0.to_owned(), param.1.to_owned())),
-        );
+    pub fn payload(mut self, payload: &str) -> Self {
+        self.payload = payload.to_owned();
         self
     }
 

@@ -26,17 +26,3 @@ pub fn sign_hmac(method: &str, path: &str, query: &str, payload: &str, timestamp
     let signature_bytes = mac.finalize().into_bytes();
     Ok(hex::encode(signature_bytes))
 }
-
-pub fn payload_to_json_str(payload: Vec<(String, String)>) -> Result<String, serde_json::Error> {
-    if payload.is_empty() {
-        Ok(String::new())  // -> ""
-    } else {
-        let mut map = Map::new();
-        for (k, v) in payload {
-            map.insert(k, Value::String(v));
-        }
-
-        let obj = Value::Object(map);
-        serde_json::to_string(&obj)  // e.g. -> "{\"currency_pair\":\"GT_USDT\",…}"
-    }
-}

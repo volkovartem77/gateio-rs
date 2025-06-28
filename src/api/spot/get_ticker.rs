@@ -1,3 +1,4 @@
+use serde_json::{Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 pub struct GetTicker {
@@ -19,16 +20,17 @@ impl GetTicker {
 impl From<GetTicker> for Request {
     fn from(g: GetTicker) -> Request {
         let mut params = Vec::new();
+        let payload = Map::new();
         if let Some(s) = g.currency_pair { params.push(("currency_pair".into(), s)); }
         if let Some(tz) = g.timezone { params.push(("timezone".into(), tz)); }
 
-        let mut payload = Vec::new();
+        let payload_json = Value::Object(payload);
 
         Request {
             method: Method::Get,
             path: "/api/v4/spot/tickers".into(),
             params,
-            payload,
+            payload: payload_json.to_string(),
             x_gate_exp_time: None,
             credentials: g.credentials,
             sign: false,

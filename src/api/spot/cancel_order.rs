@@ -1,3 +1,4 @@
+use serde_json::{Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 /// # Detailed descriptions
@@ -72,13 +73,15 @@ impl From<CancelOrder> for Request {
             params.push(("action_mode".into(), action_mode.to_string()));
         }
 
-        let mut payload = Vec::new();
+        let payload = Map::new();
+
+        let payload_json = Value::Object(payload);
 
         Request {
             method: Method::Delete,
             path: format!("/api/v4/spot/orders/{}", request.order_id).into(),
             params,
-            payload,
+            payload: payload_json.to_string(),
             x_gate_exp_time: request.x_gate_exp_time,
             credentials: request.credentials,
             sign: true,

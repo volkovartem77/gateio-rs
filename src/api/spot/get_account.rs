@@ -1,3 +1,4 @@
+use serde_json::{Map, Value};
 use crate::http::{request::Request, Credentials, Method};
 
 pub struct GetAccount {
@@ -6,27 +7,42 @@ pub struct GetAccount {
 }
 
 impl GetAccount {
-    pub fn new() -> Self { Self { currency: None, credentials: None } }
+    pub fn new() -> Self {
+        Self {
+            currency: None,
+            credentials: None,
+        }
+    }
 
-    pub fn currency(mut self, s: &str) -> Self { self.currency = Some(s.into()); self }
+    pub fn currency(mut self, currency: &str) -> Self {
+        self.currency = Some(currency.into());
+        self
+    }
 
-    pub fn credentials(mut self, creds: Credentials) -> Self { self.credentials = Some(creds); self }
+    pub fn credentials(mut self, creds: Credentials) -> Self {
+        self.credentials = Some(creds);
+        self
+    }
 }
 
 impl From<GetAccount> for Request {
-    fn from(g: GetAccount) -> Request {
+    fn from(request: GetAccount) -> Request {
         let mut params = Vec::new();
-        if let Some(s) = g.currency { params.push(("currency".into(), s)); }
+        if let Some(currency) = request.currency {
+            params.push(("currency".into(), currency));
+        }
 
-        let mut payload = Vec::new();
+        let payload = Map::new();
+
+        let payload_json = Value::Object(payload);
 
         Request {
             method: Method::Get,
             path: "/api/v4/spot/accounts".into(),
             params,
-            payload,
+            payload: payload_json.to_string(),
             x_gate_exp_time: None,
-            credentials: g.credentials,
+            credentials: request.credentials,
             sign: true,
         }
     }
