@@ -2,7 +2,7 @@ use serde_json::{json, Value};
 use gateio_rs::{
     ureq::GateHttpClient,                // синхронный клиент на базе ureq
 };
-use gateio_rs::api::spot::{create_order, get_account, get_account_book, get_batch_user_fee, get_currency_pair, get_currency_pairs, get_ticker};
+use gateio_rs::api::spot::{create_order, get_account, get_account_book, get_batch_user_fee, get_currency_pair, get_currency_pairs, get_ticker, create_batch_orders, Order};
 use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
@@ -40,8 +40,28 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     // let req = cancel_order("862893921486", "DUREV_USDT");
 
     // let req = get_market_trades("ADA_USDT").last_id("15881638").reverse(true).limit(5);
-    let req = get_batch_user_fee("BTC_USDT,ETH_USDT");
+    // let req = get_batch_user_fee("BTC_USDT,ETH_USDT");
     // let req = get_account_book().book_type("new_order");
+
+    // Test batch orders
+    let order1 = Order::new("BTC_USDT", "buy", "0.001")
+        .text("t-abc123")
+        .order_type("limit")
+        .account("unified")
+        .price("65000")
+        .time_in_force("gtc")
+        .iceberg("0");
+
+    let order2 = Order::new("ETH_USDT", "buy", "0.01")
+        .text("t-def456")
+        .order_type("limit")
+        .account("unified")
+        .price("3000")
+        .time_in_force("gtc")
+        .iceberg("0");
+
+    let orders = vec![order1, order2];
+    let req = create_batch_orders(orders);
 
 
     let resp = client.send(req)?;

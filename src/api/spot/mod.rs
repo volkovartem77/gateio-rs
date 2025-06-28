@@ -12,6 +12,8 @@ pub mod get_account_book;
 pub mod create_order;
 pub mod cancel_order;
 pub mod amend_order;
+pub mod order;
+pub mod create_batch_orders;
 
 use get_currencies::GetCurrencies;
 use get_currency::GetCurrency;
@@ -28,6 +30,8 @@ use get_account_book::GetAccountBook;
 use create_order::CreateOrder;
 use cancel_order::CancelOrder;
 use amend_order::AmendOrder;
+pub use order::Order;
+use create_batch_orders::CreateBatchOrders;
 
 /// List all currencies' details <br/>
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#list-all-currencies-details)
@@ -115,5 +119,11 @@ pub fn cancel_order(order_id: &str, currency_pair: &str) -> CancelOrder {
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#amend-an-order)
 pub fn amend_order(order_id: &str, currency_pair: &str) -> AmendOrder {
     AmendOrder::new(order_id, currency_pair)
+}
+
+/// Create a batch of orders <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-batch-of-orders)
+pub fn create_batch_orders(orders: Vec<Order>) -> CreateBatchOrders {
+    CreateBatchOrders::new(orders)
 }
 
