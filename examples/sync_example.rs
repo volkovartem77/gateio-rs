@@ -2,7 +2,7 @@ use serde_json::{json, Value};
 use gateio_rs::{
     ureq::GateHttpClient,                // синхронный клиент на базе ureq
 };
-use gateio_rs::api::spot::{create_order, get_account, get_account_book, get_currency_pair, get_currency_pairs, get_ticker};
+use gateio_rs::api::spot::{create_order, get_account, get_account_book, get_batch_user_fee, get_currency_pair, get_currency_pairs, get_ticker};
 use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
@@ -19,7 +19,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     //     .currency_pair("BTC_USDT")
     //     .timezone("utc8");
 
-    let req = get_account();//.currency("USDT");
+    // let req = get_account();//.currency("USDT");
     // let req = get_ticker()
     //     .currency_pair("BTC_USDT")
     //     .timezone("utc8");
@@ -40,7 +40,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     // let req = cancel_order("862893921486", "DUREV_USDT");
 
     // let req = get_market_trades("ADA_USDT").last_id("15881638").reverse(true).limit(5);
-    // let req = get_batch_user_fee("BTC_USDT,ETH_USDT");
+    let req = get_batch_user_fee("BTC_USDT,ETH_USDT");
     // let req = get_account_book().book_type("new_order");
 
 

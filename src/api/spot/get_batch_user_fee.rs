@@ -25,12 +25,6 @@ impl From<GetBatchUserFee> for Request {
             ("currency_pairs".to_owned(), request.currency_pairs),
         ];
 
-        // TODO: делать этот файл
-        //  идея в том что бы сделать объект Order (api/spot/order.rs)
-        //  и юзер может создавать свои ордера
-        //  а эта функция будет принимать на вход Vec<Order> и собирать payload
-        //  и надо затестить это все
-
         Request {
             method: Method::Get,
             path: "/api/v4/spot/batch_fee".into(),
