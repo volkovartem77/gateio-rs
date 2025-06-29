@@ -3,7 +3,6 @@ use hmac::{Hmac, Mac};
 use sha2::Sha512;
 use std::error::Error;
 use hmac::digest::Digest;
-use serde_json::{Map, Value};
 
 pub fn sign_hmac(method: &str, path: &str, query: &str, payload: &str, timestamp: &str, key: &str) -> Result<String, Box<dyn Error>> {
 
