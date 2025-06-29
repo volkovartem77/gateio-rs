@@ -1,9 +1,9 @@
 use serde_json::Value;
 use gateio_rs::{
     ureq::GateHttpClient,
+    api::spot,
+    http::Credentials,
 };
-use gateio_rs::api::spot::get_my_trades;
-use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     dotenv::dotenv().ok();
@@ -14,11 +14,10 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = get_my_trades()
+    let req = spot::get_my_trades()
         .currency_pair("BTC_USDT")
         .page(1)
-        .limit(10)
-        .credentials(credentials);
+        .limit(10);
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

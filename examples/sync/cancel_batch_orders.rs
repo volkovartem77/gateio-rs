@@ -1,9 +1,9 @@
 use serde_json::Value;
 use gateio_rs::{
     ureq::GateHttpClient,
+    api::spot::{self, CancelOrderRequest},
+    http::Credentials,
 };
-use gateio_rs::api::spot::{cancel_batch_orders, CancelOrderRequest};
-use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     dotenv::dotenv().ok();
@@ -26,8 +26,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
         },
     ];
     
-    let req = cancel_batch_orders(orders_to_cancel)
-        .credentials(credentials);
+    let req = spot::cancel_batch_orders(orders_to_cancel);
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

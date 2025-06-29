@@ -4,5 +4,4 @@
 //  - get_price_orders
 //  - create_price_orders
 
-// TODO:  non String parameters
-//  но надо проверить будут ли они реально работать или будет ошибка
+// TODO: ureq -> use latest. Error.

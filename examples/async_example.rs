@@ -1,20 +1,27 @@
+#[cfg(feature = "enable-hyper")]
 use gateio_rs::{
     hyper::GateHttpClient,
-    api::spot::get_ticker::GetTicker,
-    http::request::Credentials,
+    api::spot::GetTicker,
+    http::Credentials,
 };
 
+#[cfg(feature = "enable-hyper")]
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let credentials = Credentials::from_hmac("your-api-key", "your-secret");
+    let credentials = Credentials::new("your-api-key".to_string(), "your-secret".to_string());
 
     let client = GateHttpClient::default().credentials(credentials);
 
-    let request = GetTicker::new().symbol("BTC_USDT").timezone("utc8");
+    let request = GetTicker::new().currency_pair("BTC_USDT").timezone("utc8");
 
     let response = client.send(request).await?;
 
     println!("{:#}", response.into_body_str().await?);
 
     Ok(())
+}
+
+#[cfg(not(feature = "enable-hyper"))]
+fn main() {
+    println!("This example requires the enable-hyper feature. Run with: cargo run --example async_example --features enable-hyper --no-default-features");
 }

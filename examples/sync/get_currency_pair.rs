@@ -14,9 +14,8 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // Get details for a specific currency pair
+    let req = spot::get_currency_pair("BTC_USDT");
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

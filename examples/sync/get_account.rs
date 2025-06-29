@@ -14,14 +14,22 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // Get all account balances
+    let req = spot::get_account();
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;
     let resp_obj: Value = serde_json::from_str(&body).unwrap();
-    println!("{:?}", resp_obj);
+    println!("All account balances: {:?}", resp_obj);
+    
+    // Get specific currency balance
+    let req = spot::get_account()
+        .currency("USDT");
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let resp_obj: Value = serde_json::from_str(&body).unwrap();
+    println!("USDT balance: {:?}", resp_obj);
     
     Ok(())
 }

@@ -14,9 +14,12 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // Create a limit order
+    let req = spot::create_order("BTC_USDT", "buy", "0.001")
+        .order_type("limit")
+        .price("30000")
+        .time_in_force("gtc")
+        .account("spot");
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

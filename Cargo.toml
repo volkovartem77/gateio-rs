@@ -44,33 +44,90 @@ hex = "0.4.3"
 dotenv = "0.15.0"
 
 [[example]]
-name = "get_open_orders"
-path = "examples/sync/get_open_orders.rs"
-
-[[example]]
-name = "get_orders"
-path = "examples/sync/get_orders.rs"
-
-[[example]]
-name = "get_order"
-path = "examples/sync/get_order.rs"
+name = "amend_order"
+path = "examples/sync/amend_order.rs"
 
 [[example]]
 name = "cancel_batch_orders"
 path = "examples/sync/cancel_batch_orders.rs"
 
 [[example]]
-name = "get_my_trades"
-path = "examples/sync/get_my_trades.rs"
+name = "cancel_order"
+path = "examples/sync/cancel_order.rs"
+
+[[example]]
+name = "create_batch_orders"
+path = "examples/sync/create_batch_orders.rs"
+
+[[example]]
+name = "create_order"
+path = "examples/sync/create_order.rs"
+
+[[example]]
+name = "get_account"
+path = "examples/sync/get_account.rs"
+
+[[example]]
+name = "get_account_book"
+path = "examples/sync/get_account_book.rs"
+
+[[example]]
+name = "get_batch_user_fee"
+path = "examples/sync/get_batch_user_fee.rs"
+
+[[example]]
+name = "get_candlesticks"
+path = "examples/sync/get_candlesticks.rs"
+
+[[example]]
+name = "get_currencies"
+path = "examples/sync/get_currencies.rs"
+
+[[example]]
+name = "get_currency"
+path = "examples/sync/get_currency.rs"
+
+[[example]]
+name = "get_currency_pair"
+path = "examples/sync/get_currency_pair.rs"
+
+[[example]]
+name = "get_currency_pairs"
+path = "examples/sync/get_currency_pairs.rs"
 
 [[example]]
 name = "get_fee"
 path = "examples/sync/get_fee.rs"
 
 [[example]]
+name = "get_market_trades"
+path = "examples/sync/get_market_trades.rs"
+
+[[example]]
+name = "get_my_trades"
+path = "examples/sync/get_my_trades.rs"
+
+[[example]]
+name = "get_open_orders"
+path = "examples/sync/get_open_orders.rs"
+
+[[example]]
+name = "get_order"
+path = "examples/sync/get_order.rs"
+
+[[example]]
+name = "get_orderbook"
+path = "examples/sync/get_orderbook.rs"
+
+[[example]]
+name = "get_orders"
+path = "examples/sync/get_orders.rs"
+
+[[example]]
+name = "get_ticker"
+path = "examples/sync/get_ticker.rs"
+
+[[example]]
 name = "create_price_order"
 path = "examples/sync/create_price_order.rs"
 
-[[example]]
-name = "get_price_orders"
-path = "examples/sync/get_price_orders.rs"

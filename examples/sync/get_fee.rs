@@ -1,9 +1,9 @@
 use serde_json::Value;
 use gateio_rs::{
     ureq::GateHttpClient,
+    api::spot,
+    http::Credentials,
 };
-use gateio_rs::api::spot::get_fee;
-use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     dotenv::dotenv().ok();
@@ -15,8 +15,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     let client = GateHttpClient::default().credentials(credentials.clone());
     
     // Test without currency_pair parameter (get all fees)
-    let req = get_fee()
-        .credentials(credentials.clone());
+    let req = spot::get_fee();
     
     println!("Fetching trading fee rates...");
     let resp = client.send(req)?;
@@ -25,9 +24,8 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     println!("All trading fee rates: {:?}", resp_obj);
     
     // Test with specific currency_pair parameter
-    let req = get_fee()
-        .currency_pair("BTC_USDT")
-        .credentials(credentials);
+    let req = spot::get_fee()
+        .currency_pair("BTC_USDT");
     
     println!("\nFetching trading fee rates for BTC_USDT...");
     let resp = client.send(req)?;

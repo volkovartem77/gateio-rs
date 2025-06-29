@@ -1,9 +1,9 @@
 use serde_json::Value;
 use gateio_rs::{
     ureq::GateHttpClient,
+    api::spot,
+    http::Credentials,
 };
-use gateio_rs::api::spot::get_price_orders;
-use gateio_rs::http::Credentials;
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     dotenv::dotenv().ok();
@@ -14,27 +14,22 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    // Test 1: Get all price-triggered orders
-    let req = get_price_orders()
-        .limit(10)
-        .credentials(credentials.clone());
+    // Get ticker for all currency pairs
+    let req = spot::get_ticker();
     
-    println!("Fetching all price-triggered orders...");
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;
     let resp_obj: Value = serde_json::from_str(&body).unwrap();
-    println!("All price orders: {:?}", resp_obj);
+    println!("All tickers: {:?}", resp_obj);
     
-    // Test 2: Get price orders for specific currency pair (simplified)
-    let req = get_price_orders()
-        .currency_pair("BTC_USDT")
-        .credentials(credentials.clone());
+    // Get ticker for specific currency pair
+    let req = spot::get_ticker()
+        .currency_pair("BTC_USDT");
     
-    println!("\nFetching BTC_USDT price-triggered orders...");
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;
     let resp_obj: Value = serde_json::from_str(&body).unwrap();
-    println!("BTC_USDT price orders: {:?}", resp_obj);
+    println!("BTC_USDT ticker: {:?}", resp_obj);
     
     Ok(())
 }

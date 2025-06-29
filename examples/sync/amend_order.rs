@@ -14,9 +14,11 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // You need to replace with an actual order ID from your account
+    let req = spot::amend_order("123456789", "BTC_USDT")
+        .amount("0.01")
+        .price("30000")
+        .account("spot");
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

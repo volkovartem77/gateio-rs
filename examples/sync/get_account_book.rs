@@ -14,9 +14,11 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // Get account book entries
+    let req = spot::get_account_book()
+        .currency("USDT")
+        .limit(20)
+        .page(1);
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

@@ -14,8 +14,9 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
+    // Get candlestick data for BTC_USDT
+    let req = spot::get_candlesticks("BTC_USDT")
+        .interval("1h")
         .limit(100);
     
     let resp = client.send(req)?;

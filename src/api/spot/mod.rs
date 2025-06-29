@@ -21,7 +21,6 @@ pub mod cancel_batch_orders;
 pub mod get_my_trades;
 pub mod get_fee;
 pub mod create_price_order;
-pub mod get_price_orders;
 
 use get_currencies::GetCurrencies;
 use get_currency::GetCurrency;
@@ -48,7 +47,6 @@ use cancel_batch_orders::CancelBatchOrders;
 use get_my_trades::GetMyTrades;
 use get_fee::GetFee;
 use create_price_order::CreatePriceOrder;
-use get_price_orders::GetPriceOrders;
 
 /// List all currencies' details <br/>
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#list-all-currencies-details)
@@ -122,6 +120,12 @@ pub fn get_open_orders() -> GetOpenOrders {
     GetOpenOrders::new()
 }
 
+/// Create an order <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-an-order)
+pub fn create_order(currency_pair: &str, side: &str, amount: &str) -> CreateOrder {
+    CreateOrder::new(currency_pair, side, amount)
+}
+
 /// List orders <br/>
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#list-orders)
 pub fn get_orders() -> GetOrders {
@@ -152,28 +156,6 @@ pub fn get_fee() -> GetFee {
     GetFee::new()
 }
 
-/// Create a price-triggered order <br/>
-/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-price-triggered-order)
-pub fn create_price_order(currency_pair: &str, trigger_price: &str, side: &str, amount: &str) -> CreatePriceOrder {
-    CreatePriceOrder::new(currency_pair, trigger_price, side, amount)
-}
-
-/// List price-triggered orders <br/>
-/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#retrieve-running-auto-order-list)
-pub fn get_price_orders() -> GetPriceOrders {
-    GetPriceOrders::new()
-}
-
-
-
-
-
-/// Create an order <br/>
-/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-an-order)
-pub fn create_order(currency_pair: &str, side: &str, amount: &str) -> CreateOrder {
-    CreateOrder::new(currency_pair, side, amount)
-}
-
 /// Cancel a single order <br/>
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#cancel-a-single-order)
 pub fn cancel_order(order_id: &str, currency_pair: &str) -> CancelOrder {
@@ -190,5 +172,18 @@ pub fn amend_order(order_id: &str, currency_pair: &str) -> AmendOrder {
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-batch-of-orders)
 pub fn create_batch_orders(orders: Vec<Order>) -> CreateBatchOrders {
     CreateBatchOrders::new(orders)
+}
+
+/// Create a price-triggered order <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-price-triggered-order)
+pub fn create_price_order(
+    market: &str,
+    trigger_price: &str, 
+    trigger_rule: &str,
+    order_side: &str,
+    order_price: &str,
+    order_amount: &str,
+) -> CreatePriceOrder {
+    CreatePriceOrder::new(market, trigger_price, trigger_rule, order_side, order_price, order_amount)
 }
 

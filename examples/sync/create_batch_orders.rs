@@ -1,7 +1,7 @@
 use serde_json::Value;
 use gateio_rs::{
     ureq::GateHttpClient,
-    api::spot,
+    api::spot::{self, Order},
     http::Credentials,
 };
 
@@ -14,9 +14,19 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // Create multiple orders
+    let orders = vec![
+        Order::new("BTC_USDT", "buy", "0.001")
+            .order_type("limit")
+            .price("30000")
+            .account("spot"),
+        Order::new("ETH_USDT", "buy", "0.01")
+            .order_type("limit")
+            .price("2000")
+            .account("spot"),
+    ];
+    
+    let req = spot::create_batch_orders(orders);
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

@@ -14,9 +14,10 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     
     let client = GateHttpClient::default().credentials(credentials.clone());
     
-    let req = spot::get_open_orders()
-        .page(1)
-        .limit(100);
+    // Get recent market trades for BTC_USDT
+    let req = spot::get_market_trades("BTC_USDT")
+        .limit(100)
+        .reverse(false);
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;
