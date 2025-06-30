@@ -25,6 +25,9 @@ pub mod get_price_orders;
 pub mod cancel_all_price_orders;
 pub mod get_price_order;
 pub mod cancel_price_order;
+pub mod get_server_time;
+pub mod cancel_all_open_orders;
+pub mod countdown_cancel_all;
 
 use get_currencies::GetCurrencies;
 use get_currency::GetCurrency;
@@ -55,6 +58,9 @@ use get_price_orders::GetPriceOrders;
 use cancel_all_price_orders::CancelAllPriceOrders;
 use get_price_order::GetPriceOrder;
 use cancel_price_order::CancelPriceOrder;
+use get_server_time::GetServerTime;
+use cancel_all_open_orders::CancelAllOpenOrders;
+use countdown_cancel_all::CountdownCancelAll;
 
 /// List all currencies' details <br/>
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#list-all-currencies-details)
@@ -217,5 +223,23 @@ pub fn get_price_order(order_id: &str) -> GetPriceOrder {
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#cancel-a-price-triggered-order)
 pub fn cancel_price_order(order_id: &str) -> CancelPriceOrder {
     CancelPriceOrder::new(order_id)
+}
+
+/// Get server current time <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#get-server-current-time)
+pub fn get_server_time() -> GetServerTime {
+    GetServerTime::new()
+}
+
+/// Cancel all open orders <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#cancel-all-open-orders)
+pub fn cancel_all_open_orders() -> CancelAllOpenOrders {
+    CancelAllOpenOrders::new()
+}
+
+/// Countdown cancel orders <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#countdown-cancel-orders)
+pub fn countdown_cancel_all(timeout: i64) -> CountdownCancelAll {
+    CountdownCancelAll::new(timeout)
 }
 

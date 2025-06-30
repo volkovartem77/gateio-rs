@@ -178,7 +178,7 @@ impl From<CreateOrder> for Request {
         }
 
         if let Some(order_type) = request.order_type {
-            payload.insert("order_type".to_string(), json!(order_type));
+            payload.insert("type".to_string(), json!(order_type));
         }
 
         if let Some(account) = request.account {

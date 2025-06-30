@@ -147,3 +147,15 @@ path = "examples/sync/get_price_order.rs"
 name = "cancel_price_order"
 path = "examples/sync/cancel_price_order.rs"
 
+[[example]]
+name = "get_server_time"
+path = "examples/sync/get_server_time.rs"
+
+[[example]]
+name = "cancel_all_open_orders"
+path = "examples/sync/cancel_all_open_orders.rs"
+
+[[example]]
+name = "countdown_cancel_all"
+path = "examples/sync/countdown_cancel_all.rs"
+

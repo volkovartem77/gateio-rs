@@ -8,24 +8,20 @@ use gateio_rs::{
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     dotenv::dotenv().ok();
     
+    // ⚠️  WARNING: This will cancel ALL open orders!
+    println!("⚠️  WARNING: This will cancel ALL open orders!");
+    println!("Proceeding in 3 seconds... Press Ctrl+C to abort");
+    std::thread::sleep(std::time::Duration::from_secs(3));
+    
     let api_key = std::env::var("GATE_API_KEY").expect("GATE_API_KEY not set");
     let api_secret = std::env::var("GATE_API_SECRET").expect("GATE_API_SECRET not set");
     let credentials = Credentials::new(api_key, api_secret);
     
     let client = GateHttpClient::default().credentials(credentials.clone());
-
-    // Create a limit order
-    // let req = spot::create_order("BTC_USDT", "buy", "0.001")
-    //     .order_type("limit")
-    //     .price("30000")
-    //     .time_in_force("gtc")
-    //     .account("spot");
-
-    // Create a market order
-    let req = spot::create_order("DUREV_USDT", "sell", "0")
-        .order_type("market")
-        .time_in_force("ioc");
-        // .account("spot");
+    
+    // Cancel all open orders (optionally filter by currency_pair)
+    let req = spot::cancel_all_open_orders()
+        .currency_pair("DUREV_USDT"); // Optional: cancel only for specific pair
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

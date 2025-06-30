@@ -8,29 +8,27 @@ use gateio_rs::{
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     dotenv::dotenv().ok();
     
+    // ⚠️  WARNING: This will set a countdown timer to cancel ALL orders!
+    println!("⚠️  WARNING: This will set a countdown timer to cancel ALL orders!");
+    println!("Proceeding in 3 seconds... Press Ctrl+C to abort");
+    std::thread::sleep(std::time::Duration::from_secs(3));
+    
     let api_key = std::env::var("GATE_API_KEY").expect("GATE_API_KEY not set");
     let api_secret = std::env::var("GATE_API_SECRET").expect("GATE_API_SECRET not set");
     let credentials = Credentials::new(api_key, api_secret);
     
     let client = GateHttpClient::default().credentials(credentials.clone());
-
-    // Create a limit order
-    // let req = spot::create_order("BTC_USDT", "buy", "0.001")
-    //     .order_type("limit")
-    //     .price("30000")
-    //     .time_in_force("gtc")
-    //     .account("spot");
-
-    // Create a market order
-    let req = spot::create_order("DUREV_USDT", "sell", "0")
-        .order_type("market")
-        .time_in_force("ioc");
-        // .account("spot");
+    
+    // Set countdown timer to cancel all orders after 60 seconds
+    let timeout_seconds = 60;
+    let req = spot::countdown_cancel_all(timeout_seconds)
+        .credentials(credentials);
+        // .currency_pair("BTC_USDT"); // Optional: apply only to specific pair
     
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;
     let resp_obj: Value = serde_json::from_str(&body).unwrap();
-    println!("{:?}", resp_obj);
+    println!("Countdown timer set: {:?}", resp_obj);
     
     Ok(())
 }
