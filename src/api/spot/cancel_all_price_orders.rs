@@ -1,4 +1,4 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 
 /// # Cancel all price-triggered orders
 ///

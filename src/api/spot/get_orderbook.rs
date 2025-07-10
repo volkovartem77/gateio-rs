@@ -1,4 +1,4 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 
 pub struct GetOrderbook {
     pub currency_pair: String,
@@ -42,9 +42,7 @@ impl GetOrderbook {
 
 impl From<GetOrderbook> for Request {
     fn from(request: GetOrderbook) -> Request {
-        let mut params = vec![
-            ("currency_pair".to_owned(), request.currency_pair),
-        ];
+        let mut params = vec![("currency_pair".to_owned(), request.currency_pair)];
 
         if let Some(interval) = request.interval {
             params.push(("interval".into(), interval.to_string()));

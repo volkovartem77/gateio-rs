@@ -1,4 +1,4 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 
 pub struct GetMarketTrades {
     pub currency_pair: String,
@@ -63,9 +63,7 @@ impl GetMarketTrades {
 
 impl From<GetMarketTrades> for Request {
     fn from(request: GetMarketTrades) -> Request {
-        let mut params = vec![
-            ("currency_pair".to_owned(), request.currency_pair),
-        ];
+        let mut params = vec![("currency_pair".to_owned(), request.currency_pair)];
 
         if let Some(limit) = request.limit {
             params.push(("limit".into(), limit.to_string()));

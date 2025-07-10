@@ -1,4 +1,4 @@
-use crate::http::{request::Request, Credentials};
+use crate::http::{Credentials, request::Request};
 use crate::ureq::{Error, Response};
 use crate::version::VERSION;
 use http::Uri;
@@ -71,10 +71,12 @@ impl GateHttpClient {
         // Insert credentials
         let client_credentials = self.credentials.as_ref();
         let request_credentials = credentials.as_ref();
-        if let Some(Credentials { api_key, api_secret }) = request_credentials.or(client_credentials)
+        if let Some(Credentials {
+            api_key,
+            api_secret,
+        }) = request_credentials.or(client_credentials)
         {
             if sign {
-
                 // Use system clock, panic if system clock is behind `std::time::UNIX_EPOCH`
                 let mut timestamp = SystemTime::now()
                     .duration_since(UNIX_EPOCH)
@@ -102,7 +104,7 @@ impl GateHttpClient {
                     &timestamp.to_string(),
                     api_secret,
                 )
-                    .map_err(|_| Error::InvalidApiSecret)?;
+                .map_err(|_| Error::InvalidApiSecret)?;
 
                 ureq_request = ureq_request.set("SIGN", &signature);
             }

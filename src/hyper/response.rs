@@ -1,4 +1,4 @@
-use crate::http::error::{GateApiError, ClientError, HttpError};
+use crate::http::error::{ClientError, GateApiError, HttpError};
 use crate::hyper::Error;
 use hyper::Body;
 use std::collections::HashMap;

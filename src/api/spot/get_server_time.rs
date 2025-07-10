@@ -1,4 +1,4 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 
 pub struct GetServerTime {
     pub credentials: Option<Credentials>,
@@ -6,9 +6,7 @@ pub struct GetServerTime {
 
 impl GetServerTime {
     pub fn new() -> Self {
-        Self {
-            credentials: None,
-        }
+        Self { credentials: None }
     }
 
     pub fn credentials(mut self, creds: Credentials) -> Self {

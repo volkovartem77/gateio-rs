@@ -1,13 +1,18 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 
 pub struct GetCurrencyPairs {
     pub credentials: Option<Credentials>,
 }
 
 impl GetCurrencyPairs {
-    pub fn new() -> Self { Self { credentials: None } }
+    pub fn new() -> Self {
+        Self { credentials: None }
+    }
 
-    pub fn credentials(mut self, creds: Credentials) -> Self { self.credentials = Some(creds); self }
+    pub fn credentials(mut self, creds: Credentials) -> Self {
+        self.credentials = Some(creds);
+        self
+    }
 }
 
 impl From<GetCurrencyPairs> for Request {

@@ -10,10 +10,21 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
 
     let client = GateHttpClient::default().credentials(credentials.clone());
 
-    let req = spot::get_price_orders()
-        .status("open")
-        .market("BTC_USDT")
-        .limit(10);
+    // ⚠️  WARNING: This is for cross margin liquidation scenarios
+    // Use with extreme caution
+    println!("⚠️  WARNING: This creates cross liquidation orders!");
+    println!("These are typically used in margin liquidation scenarios.");
+    println!("Proceeding in 3 seconds... Press Ctrl+C to abort");
+    std::thread::sleep(std::time::Duration::from_secs(3));
+
+    // Create cross liquidation orders
+    let orders = vec![
+        spot::CrossLiquidateOrder::new("BTC_USDT", "0.01", "45000")
+            .text("Cross liquidation order")
+            .action_mode("ACK"),
+    ];
+
+    let req = spot::create_cross_liquidate_orders(orders);
 
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

@@ -1,23 +1,23 @@
 use crate::http::{Credentials, Method, request::Request};
 
 /// # Get a price-triggered order
-/// 
+///
 /// Retrieve details of a specific price-triggered order (auto order/conditional order) by order ID.
-/// 
+///
 /// ## Order Status Values:
 /// - "open": Waiting to trigger
 /// - "cancelled": Manually cancelled  
 /// - "finish": Successfully executed
 /// - "failed": Failed to execute
 /// - "expired": Expired
-/// 
+///
 /// ## Response includes:
 /// - Order ID and creation time
 /// - Trigger condition (price and rule)
 /// - Order details (currency pair, side, amount, price)
 /// - Current status and execution details
 /// - Account information
-/// 
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#get-a-price-triggered-order)
 pub struct GetPriceOrder {
     pub order_id: String,

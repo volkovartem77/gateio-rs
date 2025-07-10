@@ -22,4 +22,3 @@ pub mod hyper;
 
 #[cfg(feature = "enable-ureq")]
 pub mod ureq;
-

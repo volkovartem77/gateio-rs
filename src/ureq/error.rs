@@ -1,5 +1,5 @@
 use crate::http::error::{ClientError, HttpError as GateHttpError};
-use http::{uri::InvalidUri, Error as HttpError};
+use http::{Error as HttpError, uri::InvalidUri};
 use ureq::Error as UreqError;
 
 /// Communication error with the server.

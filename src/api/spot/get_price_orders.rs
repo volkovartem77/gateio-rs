@@ -1,17 +1,17 @@
 use crate::http::{Credentials, Method, request::Request};
 
 /// # Retrieve running auto order list
-/// 
+///
 /// Retrieve running price-triggered orders (also called auto orders or conditional orders).
 /// These orders are not placed in the order book until their trigger condition is met.
-/// 
+///
 /// ## Status Values:
 /// - "open": Waiting to trigger
 /// - "cancelled": Manually cancelled  
 /// - "finish": Successfully executed
 /// - "failed": Failed to execute
 /// - "expired": Expired
-/// 
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#retrieve-running-auto-order-list)
 pub struct GetPriceOrders {
     pub status: Option<String>,

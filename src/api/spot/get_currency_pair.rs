@@ -9,7 +9,7 @@ impl GetCurrencyPair {
     pub fn new(currency_pair: &str) -> Self {
         Self {
             currency_pair: currency_pair.to_owned(),
-            credentials: None
+            credentials: None,
         }
     }
 

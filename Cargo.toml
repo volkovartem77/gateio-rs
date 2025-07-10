@@ -159,3 +159,15 @@ path = "examples/sync/cancel_all_open_orders.rs"
 name = "countdown_cancel_all"
 path = "examples/sync/countdown_cancel_all.rs"
 
+[[example]]
+name = "amend_batch_orders"
+path = "examples/sync/amend_batch_orders.rs"
+
+[[example]]
+name = "create_cross_liquidate_orders"
+path = "examples/sync/create_cross_liquidate_orders.rs"
+
+[[example]]
+name = "get_insurance_history"
+path = "examples/sync/get_insurance_history.rs"
+

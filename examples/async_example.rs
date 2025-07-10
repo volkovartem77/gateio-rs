@@ -1,9 +1,5 @@
 #[cfg(feature = "enable-hyper")]
-use gateio_rs::{
-    hyper::GateHttpClient,
-    api::spot::GetTicker,
-    http::Credentials,
-};
+use gateio_rs::{api::spot::GetTicker, http::Credentials, hyper::GateHttpClient};
 
 #[cfg(feature = "enable-hyper")]
 #[tokio::main]
@@ -23,5 +19,7 @@ async fn main() -> anyhow::Result<()> {
 
 #[cfg(not(feature = "enable-hyper"))]
 fn main() {
-    println!("This example requires the enable-hyper feature. Run with: cargo run --example async_example --features enable-hyper --no-default-features");
+    println!(
+        "This example requires the enable-hyper feature. Run with: cargo run --example async_example --features enable-hyper --no-default-features"
+    );
 }

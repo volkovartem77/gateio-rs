@@ -1,22 +1,24 @@
 use base64::Engine as _;
+use hmac::digest::Digest;
 use hmac::{Hmac, Mac};
 use sha2::Sha512;
 use std::error::Error;
-use hmac::digest::Digest;
 
-pub fn sign_hmac(method: &str, path: &str, query: &str, payload: &str, timestamp: &str, key: &str) -> Result<String, Box<dyn Error>> {
-
+pub fn sign_hmac(
+    method: &str,
+    path: &str,
+    query: &str,
+    payload: &str,
+    timestamp: &str,
+    key: &str,
+) -> Result<String, Box<dyn Error>> {
     // 1. SHA512(payload)
     let hashed_payload = hex::encode(Sha512::digest(payload.as_bytes()));
 
     // 2. Build canonical string
     let s = format!(
         "{}\n{}\n{}\n{}\n{}",
-        method,
-        path,
-        query,
-        hashed_payload,
-        timestamp
+        method, path, query, hashed_payload, timestamp
     );
 
     // 3. HMAC-SHA512(secret, s)

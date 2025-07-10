@@ -10,10 +10,12 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
 
     let client = GateHttpClient::default().credentials(credentials.clone());
 
-    let req = spot::get_price_orders()
-        .status("open")
-        .market("BTC_USDT")
-        .limit(10);
+    // Get insurance history with specific currency and business type
+    // Using timestamp for last 30 days (example values)
+    let now = 1704067200i64; // Example: 2024-01-01 00:00:00 UTC 
+    let month_ago = now - (30 * 24 * 60 * 60); // 30 days ago
+
+    let req = spot::get_insurance_history("margin", "USDT", month_ago, now).limit(10);
 
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

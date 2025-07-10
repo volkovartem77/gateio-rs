@@ -1,5 +1,5 @@
-use crate::http::{request::Request, Credentials, Method};
 use super::order::Order;
+use crate::http::{Credentials, Method, request::Request};
 
 pub struct CreateBatchOrders {
     pub orders: Vec<Order>,

@@ -1,7 +1,7 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 use crate::hyper::{Error, Response};
 use crate::version::VERSION;
-use hyper::{client::connect::Connect, client::HttpConnector, Body, Client, Uri};
+use hyper::{Body, Client, Uri, client::HttpConnector, client::connect::Connect};
 use hyper_tls::HttpsConnector;
 use std::time::{SystemTime, UNIX_EPOCH};
 

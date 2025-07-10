@@ -1,19 +1,19 @@
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
 
 /// # Cancel a price-triggered order
-/// 
+///
 /// Cancel a specific price-triggered order (auto order/conditional order) by order ID.
 /// Only orders in "open" status (waiting to trigger) can be cancelled.
-/// 
+///
 /// ## Important Notes:
 /// - Only orders in "open" status can be cancelled
 /// - Orders that have already triggered and are executing cannot be cancelled
 /// - Completed, failed, expired orders cannot be cancelled
 /// - This action cannot be undone
-/// 
+///
 /// ## Response:
 /// Returns the cancelled order details with updated status
-/// 
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#cancel-a-price-triggered-order)
 pub struct CancelPriceOrder {
     pub order_id: String,

@@ -1,9 +1,12 @@
-use serde_json::{json, Value};
-use gateio_rs::{
-    ureq::GateHttpClient,                // синхронный клиент на базе ureq
+use gateio_rs::api::spot::{
+    Order, create_batch_orders, create_order, get_account, get_account_book, get_batch_user_fee,
+    get_currency_pair, get_currency_pairs, get_ticker,
 };
-use gateio_rs::api::spot::{create_order, get_account, get_account_book, get_batch_user_fee, get_currency_pair, get_currency_pairs, get_ticker, create_batch_orders, Order};
 use gateio_rs::http::Credentials;
+use gateio_rs::{
+    ureq::GateHttpClient, // синхронный клиент на базе ureq
+};
+use serde_json::{Value, json};
 
 fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     // 1) Create Credentials
@@ -62,7 +65,6 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
 
     let orders = vec![order1, order2];
     let req = create_batch_orders(orders);
-
 
     let resp = client.send(req)?;
 

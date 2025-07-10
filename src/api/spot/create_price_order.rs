@@ -1,18 +1,18 @@
-use serde_json::{json, Map, Value};
-use crate::http::{request::Request, Credentials, Method};
+use crate::http::{Credentials, Method, request::Request};
+use serde_json::{Map, Value, json};
 
 /// # SpotPriceTrigger
-/// 
+///
 /// Trigger conditions for price-triggered orders
-/// 
+///
 /// ##### price:
 /// Trigger price that will activate the order
-/// 
+///
 /// ##### rule:
 /// Trigger rule:
 /// - ">=" : Order triggers when market price is greater than or equal to trigger price
 /// - "<=" : Order triggers when market price is less than or equal to trigger price
-/// 
+///
 /// ##### expiration:
 /// Valid duration in seconds (optional)
 /// If not set, the order will remain active until manually cancelled
@@ -39,29 +39,29 @@ impl SpotPriceTrigger {
 }
 
 /// # SpotPricePutOrder
-/// 
+///
 /// The order to be placed when the trigger condition is met
-/// 
+///
 /// ##### order_type:
 /// Order type - currently only "limit" orders are supported for price-triggered orders
-/// 
+///
 /// ##### side:
 /// Order side:
 /// - "buy" : Buy order
 /// - "sell" : Sell order
-/// 
+///
 /// ##### price:
 /// Limit order price - the price at which the order will be placed when triggered
-/// 
+///
 /// ##### amount:
 /// Order amount - the quantity to trade
-/// 
+///
 /// ##### account:
 /// Trading account type:
 /// - "normal" : Normal spot trading account
 /// - "margin" : Margin trading account  
 /// - "unified" : Unified trading account
-/// 
+///
 /// ##### time_in_force:
 /// Time in force for the triggered order:
 /// - "gtc" : Good Till Cancelled (default)
@@ -102,27 +102,27 @@ impl SpotPricePutOrder {
 }
 
 /// # Create a price-triggered order
-/// 
-/// A price-triggered order (also known as conditional order) will not enter the order book 
-/// until the trigger condition is met. Once triggered, it will attempt to place a limit order 
+///
+/// A price-triggered order (also known as conditional order) will not enter the order book
+/// until the trigger condition is met. Once triggered, it will attempt to place a limit order
 /// at the preset price and amount.
-/// 
+///
 /// ## Important Notes:
-/// 
+///
 /// - The conditional order does not occupy your balance until it is triggered
 /// - Make sure to set aside enough balance for this order
 /// - A price condition order can only be triggered one time
 /// - When using "<=", the trigger price should be less than the current market price  
 /// - When using ">=", the trigger price should be greater than the current market price
 /// - Only limit orders are supported as the triggered order type
-/// 
+///
 /// ## Status Values:
 /// - "open" : Waiting to trigger
 /// - "cancelled" : Manually cancelled  
 /// - "finish" : Successfully executed
 /// - "failed" : Failed to execute
 /// - "expired" : Expired
-/// 
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-price-triggered-order)
 pub struct CreatePriceOrder {
     pub trigger: SpotPriceTrigger,
@@ -200,11 +200,11 @@ impl From<CreatePriceOrder> for Request {
         let mut trigger_obj = Map::new();
         trigger_obj.insert("price".to_string(), json!(request.trigger.price));
         trigger_obj.insert("rule".to_string(), json!(request.trigger.rule));
-        
+
         if let Some(expiration) = request.trigger.expiration {
             trigger_obj.insert("expiration".to_string(), json!(expiration));
         }
-        
+
         payload.insert("trigger".to_string(), Value::Object(trigger_obj));
 
         // Add put object (the order to be placed when triggered)

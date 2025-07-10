@@ -1,66 +1,74 @@
-pub mod get_currencies;
-pub mod get_currency;
-pub mod get_currency_pairs;
-pub mod get_currency_pair;
-pub mod get_ticker;
-pub mod get_orderbook;
-pub mod get_market_trades;
-pub mod get_candlesticks;
-pub mod get_batch_user_fee;
+pub mod amend_batch_orders;
+pub mod amend_order;
+pub mod cancel_all_open_orders;
+pub mod cancel_all_price_orders;
+pub mod cancel_batch_orders;
+pub mod cancel_order;
+pub mod cancel_price_order;
+pub mod countdown_cancel_all;
+pub mod create_batch_orders;
+pub mod create_cross_liquidate_orders;
+pub mod create_order;
+pub mod create_price_order;
 pub mod get_account;
 pub mod get_account_book;
-pub mod create_order;
-pub mod cancel_order;
-pub mod amend_order;
-pub mod order;
-pub mod create_batch_orders;
-pub mod get_open_orders;
-pub mod get_orders;
-pub mod get_order;
-pub mod cancel_batch_orders;
-pub mod get_my_trades;
+pub mod get_batch_user_fee;
+pub mod get_candlesticks;
+pub mod get_currencies;
+pub mod get_currency;
+pub mod get_currency_pair;
+pub mod get_currency_pairs;
 pub mod get_fee;
-pub mod create_price_order;
-pub mod get_price_orders;
-pub mod cancel_all_price_orders;
+pub mod get_insurance_history;
+pub mod get_market_trades;
+pub mod get_my_trades;
+pub mod get_open_orders;
+pub mod get_order;
+pub mod get_orderbook;
+pub mod get_orders;
 pub mod get_price_order;
-pub mod cancel_price_order;
+pub mod get_price_orders;
 pub mod get_server_time;
-pub mod cancel_all_open_orders;
-pub mod countdown_cancel_all;
+pub mod get_ticker;
+pub mod order;
 
-use get_currencies::GetCurrencies;
-use get_currency::GetCurrency;
-use get_currency_pairs::GetCurrencyPairs;
-use get_currency_pair::GetCurrencyPair;
-use get_ticker::GetTicker;
-use get_orderbook::GetOrderbook;
-use get_market_trades::GetMarketTrades;
-use get_candlesticks::GetCandlesticks;
-use get_batch_user_fee::GetBatchUserFee;
 use get_account::GetAccount;
 use get_account_book::GetAccountBook;
+use get_batch_user_fee::GetBatchUserFee;
+use get_candlesticks::GetCandlesticks;
+use get_currencies::GetCurrencies;
+use get_currency::GetCurrency;
+use get_currency_pair::GetCurrencyPair;
+use get_currency_pairs::GetCurrencyPairs;
+use get_market_trades::GetMarketTrades;
+use get_orderbook::GetOrderbook;
+use get_ticker::GetTicker;
 
-use create_order::CreateOrder;
-use cancel_order::CancelOrder;
+use amend_batch_orders::AmendBatchOrders;
+pub use amend_batch_orders::OrderAmendment;
 use amend_order::AmendOrder;
-pub use order::Order;
-pub use cancel_batch_orders::CancelOrderRequest;
-use create_batch_orders::CreateBatchOrders;
-use get_open_orders::GetOpenOrders;
-use get_orders::GetOrders;
-use get_order::GetOrder;
-use cancel_batch_orders::CancelBatchOrders;
-use get_my_trades::GetMyTrades;
-use get_fee::GetFee;
-use create_price_order::CreatePriceOrder;
-use get_price_orders::GetPriceOrders;
-use cancel_all_price_orders::CancelAllPriceOrders;
-use get_price_order::GetPriceOrder;
-use cancel_price_order::CancelPriceOrder;
-use get_server_time::GetServerTime;
 use cancel_all_open_orders::CancelAllOpenOrders;
+use cancel_all_price_orders::CancelAllPriceOrders;
+use cancel_batch_orders::CancelBatchOrders;
+pub use cancel_batch_orders::CancelOrderRequest;
+use cancel_order::CancelOrder;
+use cancel_price_order::CancelPriceOrder;
 use countdown_cancel_all::CountdownCancelAll;
+use create_batch_orders::CreateBatchOrders;
+use create_cross_liquidate_orders::CreateCrossLiquidateOrders;
+pub use create_cross_liquidate_orders::CrossLiquidateOrder;
+use create_order::CreateOrder;
+use create_price_order::CreatePriceOrder;
+use get_fee::GetFee;
+use get_insurance_history::GetInsuranceHistory;
+use get_my_trades::GetMyTrades;
+use get_open_orders::GetOpenOrders;
+use get_order::GetOrder;
+use get_orders::GetOrders;
+use get_price_order::GetPriceOrder;
+use get_price_orders::GetPriceOrders;
+use get_server_time::GetServerTime;
+pub use order::Order;
 
 /// List all currencies' details <br/>
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#list-all-currencies-details)
@@ -192,13 +200,20 @@ pub fn create_batch_orders(orders: Vec<Order>) -> CreateBatchOrders {
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-price-triggered-order)
 pub fn create_price_order(
     market: &str,
-    trigger_price: &str, 
+    trigger_price: &str,
     trigger_rule: &str,
     order_side: &str,
     order_price: &str,
     order_amount: &str,
 ) -> CreatePriceOrder {
-    CreatePriceOrder::new(market, trigger_price, trigger_rule, order_side, order_price, order_amount)
+    CreatePriceOrder::new(
+        market,
+        trigger_price,
+        trigger_rule,
+        order_side,
+        order_price,
+        order_amount,
+    )
 }
 
 /// Retrieve running auto order list <br/>
@@ -243,3 +258,27 @@ pub fn countdown_cancel_all(timeout: i64) -> CountdownCancelAll {
     CountdownCancelAll::new(timeout)
 }
 
+/// Amend multiple orders <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#batch-modification-of-orders)
+pub fn amend_batch_orders(orders: Vec<OrderAmendment>) -> AmendBatchOrders {
+    AmendBatchOrders::new(orders)
+}
+
+/// Create cross liquidation orders <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#close-position-when-cross-currency-is-disabled)
+pub fn create_cross_liquidate_orders(
+    orders: Vec<CrossLiquidateOrder>,
+) -> CreateCrossLiquidateOrders {
+    CreateCrossLiquidateOrders::new(orders)
+}
+
+/// Query insurance fund history <br/>
+/// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#query-spot-insurance-fund-historical-data)
+pub fn get_insurance_history(
+    business: &str,
+    currency: &str,
+    from: i64,
+    to: i64,
+) -> GetInsuranceHistory {
+    GetInsuranceHistory::new(business, currency, from, to)
+}

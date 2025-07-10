@@ -1,5 +1,5 @@
+use crate::http::{Credentials, Method, request::Request};
 use serde_json::{Map, Value};
-use crate::http::{request::Request, Credentials, Method};
 
 /// # Detailed descriptions
 /// ##### order_id:
@@ -61,9 +61,7 @@ impl CancelOrder {
 
 impl From<CancelOrder> for Request {
     fn from(request: CancelOrder) -> Request {
-        let mut params = vec![
-            ("currency_pair".to_owned(), request.currency_pair),
-        ];
+        let mut params = vec![("currency_pair".to_owned(), request.currency_pair)];
 
         if let Some(account) = request.account {
             params.push(("account".into(), account.to_string()));
@@ -73,15 +71,11 @@ impl From<CancelOrder> for Request {
             params.push(("action_mode".into(), action_mode.to_string()));
         }
 
-        let payload = Map::new();
-
-        let payload_json = Value::Object(payload);
-
         Request {
             method: Method::Delete,
             path: format!("/api/v4/spot/orders/{}", request.order_id).into(),
             params,
-            payload: payload_json.to_string(),
+            payload: "".to_string(),
             x_gate_exp_time: request.x_gate_exp_time,
             credentials: request.credentials,
             sign: true,

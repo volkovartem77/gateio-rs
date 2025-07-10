@@ -65,7 +65,7 @@ impl RequestBuilder {
     /// Append `params` to the request's query string. Parameters may
     /// share the same key, and will result in a query string with one or
     /// more duplicated query parameter keys.
-    pub fn params<'a>(mut self, params: impl IntoIterator<Item=(&'a str, &'a str)>) -> Self {
+    pub fn params<'a>(mut self, params: impl IntoIterator<Item = (&'a str, &'a str)>) -> Self {
         self.params.extend(
             params
                 .into_iter()

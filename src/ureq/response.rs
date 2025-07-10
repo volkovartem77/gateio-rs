@@ -1,4 +1,4 @@
-use crate::http::error::{GateApiError, ClientError, HttpError};
+use crate::http::error::{ClientError, GateApiError, HttpError};
 use crate::ureq::Error;
 use std::collections::HashMap;
 use ureq::Response as UreqResponse;
