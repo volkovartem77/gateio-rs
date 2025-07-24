@@ -95,6 +95,10 @@ impl From<AmendOrder> for Request {
             payload.insert("amount".to_string(), json!(amount));
         }
 
+        if let Some(price) = request.price {
+            payload.insert("price".to_string(), json!(price));
+        }
+
         if let Some(amend_text) = request.amend_text {
             payload.insert("amend_text".to_string(), json!(amend_text));
         }
