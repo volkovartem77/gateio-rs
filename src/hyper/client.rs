@@ -1,14 +1,99 @@
 use crate::http::{Credentials, Method, request::Request};
 use crate::hyper::{Error, Response};
 use crate::version::VERSION;
-use hyper::Uri;
-use hyper_util::client::legacy::{Client, connect::HttpConnector};
-use http_body_util::Full;
 use bytes::Bytes;
+use http_body_util::Full;
+use hyper::Uri;
 use hyper_tls::HttpsConnector;
+use hyper_util::client::legacy::{Client, connect::HttpConnector};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-/// Gate.io async client using hyper.
+/// Asynchronous HTTP client for Gate.io API using hyper.
+///
+/// This client provides non-blocking I/O operations using async/await patterns
+/// and is designed for high-performance applications that need concurrent
+/// API operations. It automatically handles request signing, authentication,
+/// and provides a simple async interface for all API endpoints.
+///
+/// # Features
+///
+/// - **Non-blocking I/O**: Uses async/await for concurrent request handling
+/// - **Request Signing**: Automatic HMAC SHA-512 signing for authenticated endpoints
+/// - **HTTPS Support**: Built-in TLS support via hyper-tls
+/// - **Error Handling**: Comprehensive async error handling
+/// - **Flexible Configuration**: Configurable base URL and credentials
+///
+/// # Requirements
+///
+/// To use this async client, enable the `enable-hyper` feature:
+///
+/// ```toml
+/// [dependencies]
+/// gateio-rs = { version = "0.1", features = ["enable-hyper"], default-features = false }
+/// ```
+///
+/// # Examples
+///
+/// ## Basic Usage (Public API)
+///
+/// ```rust,no_run
+/// use gateio_rs::{api::spot::get_ticker, hyper::GateHttpClient};
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let client = GateHttpClient::default();
+///     let request = get_ticker().currency_pair("BTC_USDT");
+///     let response = client.send(request).await?;
+///     let data = response.into_body_str().await?;
+///     println!("Ticker: {}", data);
+///     Ok(())
+/// }
+/// ```
+///
+/// ## Authenticated Usage
+///
+/// ```rust,no_run
+/// use gateio_rs::{
+///     api::spot::get_account,
+///     http::Credentials,
+///     hyper::GateHttpClient,
+/// };
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let credentials = Credentials::new("api_key", "api_secret");
+///     let client = GateHttpClient::default().credentials(credentials);
+///     let request = get_account();
+///     let response = client.send(request).await?;
+///     let data = response.into_body_str().await?;
+///     println!("Account: {}", data);
+///     Ok(())
+/// }
+/// ```
+///
+/// ## Concurrent Requests
+///
+/// ```rust,no_run
+/// use gateio_rs::{api::spot::get_ticker, hyper::GateHttpClient};
+/// use tokio::try_join;
+///
+/// #[tokio::main]
+/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+///     let client = GateHttpClient::default();
+///     
+///     let btc_req = get_ticker().currency_pair("BTC_USDT");
+///     let eth_req = get_ticker().currency_pair("ETH_USDT");
+///     
+///     let (btc_resp, eth_resp) = try_join!(
+///         client.send(btc_req),
+///         client.send(eth_req)
+///     )?;
+///     
+///     println!("BTC: {}", btc_resp.into_body_str().await?);
+///     println!("ETH: {}", eth_resp.into_body_str().await?);
+///     Ok(())
+/// }
+/// ```
 pub struct GateHttpClient {
     client: Client<HttpsConnector<HttpConnector>, Full<Bytes>>,
     base_url: String,
@@ -22,7 +107,7 @@ impl GateHttpClient {
 
     pub fn with_url(url: &str) -> Self {
         use hyper_util::rt::TokioExecutor;
-        
+
         let https = HttpsConnector::new();
         Self {
             client: Client::builder(TokioExecutor::new()).build(https),
@@ -68,7 +153,7 @@ impl GateHttpClient {
         // Handle credentials and signing
         let client_credentials = self.credentials.as_ref();
         let request_credentials = credentials.as_ref();
-        
+
         if let Some(Credentials {
             api_key,
             api_secret,
@@ -122,12 +207,14 @@ impl GateHttpClient {
             Full::new(Bytes::from(payload))
         };
 
-        let request = req_builder
-            .body(body)
-            .expect("Failed to build request");
+        let request = req_builder.body(body).expect("Failed to build request");
 
         // Send request
-        let response = self.client.request(request).await.map_err(|e| Error::Send(Box::new(e)))?;
+        let response = self
+            .client
+            .request(request)
+            .await
+            .map_err(|e| Error::Send(Box::new(e)))?;
 
         Ok(Response::from(response))
     }

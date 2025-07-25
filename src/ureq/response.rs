@@ -17,15 +17,16 @@ impl Response {
     pub fn into_body_str(self) -> Result<String, Box<Error>> {
         let status = self.inner_response.status().as_u16();
         if 400 <= status {
-            let headers: HashMap<String, String> = self.inner_response.headers().iter().fold(
-                HashMap::new(),
-                |mut headers, (k, v)| {
-                    headers
-                        .entry(k.as_str().to_owned())
-                        .or_insert_with(|| v.to_str().unwrap_or("").to_owned());
-                    headers
-                },
-            );
+            let headers: HashMap<String, String> =
+                self.inner_response
+                    .headers()
+                    .iter()
+                    .fold(HashMap::new(), |mut headers, (k, v)| {
+                        headers
+                            .entry(k.as_str().to_owned())
+                            .or_insert_with(|| v.to_str().unwrap_or("").to_owned());
+                        headers
+                    });
 
             let (_, mut body) = self.inner_response.into_parts();
             let content = body

@@ -1,12 +1,13 @@
-/// Binance API Credentials.
+/// Gate.io API Credentials.
 ///
-/// Communication with Binance API USER_DATA endpoints requires
-/// valid API credentials.
+/// Communication with Gate.io API authenticated endpoints requires
+/// valid API credentials. These credentials are used for HMAC SHA-512
+/// signing of requests to ensure authenticity.
 ///
-/// Note: Production and TESTNET API Credentials are not
-/// interchangeable.
+/// Note: Production and testnet API credentials are not interchangeable.
+/// Make sure to use the appropriate credentials for your environment.
 ///
-/// [API Documentation](https://developers.binance.com/docs/rebate/quick-start#api-key-restrictions)
+/// [API Documentation](https://www.gate.com/docs/developers/apiv4/#authentication)
 ///
 #[derive(PartialEq, Eq, Clone)]
 pub struct Credentials {

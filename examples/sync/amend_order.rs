@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     let req = spot::amend_order("882949262345", "DUREV_USDT")
         // .amount("0.01")
         .price("0.0041");
-        // .account("spot");
+    // .account("spot");
 
     let resp = client.send(req)?;
     let body = resp.into_body_str()?;

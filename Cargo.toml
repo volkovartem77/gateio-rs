@@ -3,14 +3,13 @@ name = "gateio-rs"
 version = "0.1.0"
 edition = "2024"
 authors     = ["Artem Volkov"]
-description = "Короткое описание: что делает библиотека."
+description = "Comprehensive Rust SDK for Gate.io cryptocurrency exchange API with sync and async support"
 license     = "MIT OR Apache-2.0"
 readme      = "README.md"
 repository  = "https://github.com/volkovartem77/gateio-rs"
 homepage    = "https://github.com/volkovartem77/gateio-rs"
-keywords    = ["example", "template"]
-categories  = ["development-tools"]
-# TODO:
+keywords    = ["gateio", "cryptocurrency", "exchange", "api", "trading"]
+categories  = ["api-bindings", "web-programming::http-client"]
 
 [features]
 default = ["enable-ureq"]

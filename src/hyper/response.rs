@@ -1,13 +1,15 @@
 use crate::http::error::{ClientError, GateApiError, HttpError};
 use crate::hyper::Error;
-use std::collections::HashMap;
 use bytes::Bytes;
 use http_body_util::BodyExt;
+use std::collections::HashMap;
 
 /// REST Response
 #[derive(Debug)]
 pub struct Response {
-    inner_response: hyper::Response<http_body_util::combinators::BoxBody<Bytes, Box<dyn std::error::Error + Send + Sync>>>,
+    inner_response: hyper::Response<
+        http_body_util::combinators::BoxBody<Bytes, Box<dyn std::error::Error + Send + Sync>>,
+    >,
 }
 
 impl Response {
@@ -45,7 +47,7 @@ impl Response {
     }
 }
 
-impl<B> From<hyper::Response<B>> for Response 
+impl<B> From<hyper::Response<B>> for Response
 where
     B: http_body::Body<Data = Bytes> + Send + Sync + 'static,
     B::Error: Into<Box<dyn std::error::Error + Send + Sync>>,
@@ -59,7 +61,6 @@ where
     }
 }
 
-
 async fn hyper_body_to_string<B>(body: B) -> Result<String, Error>
 where
     B: http_body::Body + Send + 'static,
@@ -67,16 +68,13 @@ where
     B::Error: Into<Box<dyn std::error::Error + Send + Sync>>,
 {
     use http_body_util::BodyExt;
-    
+
     // Collect body bytes
-    let collected = body.collect()
-        .await
-        .map_err(|e| Error::Send(e.into()))?;
+    let collected = body.collect().await.map_err(|e| Error::Send(e.into()))?;
     let bytes = collected.to_bytes();
 
     // Convert to string
-    let content = String::from_utf8(bytes.to_vec())
-        .map_err(|e| Error::Send(Box::new(e)))?;
+    let content = String::from_utf8(bytes.to_vec()).map_err(|e| Error::Send(Box::new(e)))?;
 
     Ok(content)
 }

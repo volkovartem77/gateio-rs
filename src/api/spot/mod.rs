@@ -1,3 +1,77 @@
+//! # Gate.io Spot Trading API
+//!
+//! This module provides a comprehensive interface to Gate.io's Spot trading API endpoints.
+//! All functions return request builders that can be configured with additional parameters
+//! before sending via the HTTP client.
+//!
+//! ## Categories
+//!
+//! ### Market Data (Public)
+//! - [`get_currencies`] - List all supported currencies
+//! - [`get_currency`] - Get specific currency details
+//! - [`get_currency_pairs`] - List all trading pairs
+//! - [`get_currency_pair`] - Get specific pair details
+//! - [`get_ticker`] - Get ticker information
+//! - [`get_orderbook`] - Get order book data
+//! - [`get_market_trades`] - Get recent market trades
+//! - [`get_candlesticks`] - Get historical price data
+//! - [`get_server_time`] - Get server timestamp
+//!
+//! ### Account Management (Private)
+//! - [`get_account`] - List spot account balances
+//! - [`get_account_book`] - Query account transaction history
+//! - [`get_fee`] - Get trading fee rates
+//! - [`get_batch_user_fee`] - Get fee rates for multiple pairs
+//!
+//! ### Order Management (Private)
+//! - [`create_order`] - Place a new order
+//! - [`create_batch_orders`] - Place multiple orders
+//! - [`get_orders`] - List order history
+//! - [`get_order`] - Get specific order details
+//! - [`get_open_orders`] - List active orders
+//! - [`amend_order`] - Modify an existing order
+//! - [`amend_batch_orders`] - Modify multiple orders
+//! - [`cancel_order`] - Cancel a specific order
+//! - [`cancel_batch_orders`] - Cancel multiple orders
+//! - [`cancel_all_open_orders`] - Cancel all open orders
+//! - [`countdown_cancel_all`] - Set auto-cancel timer
+//!
+//! ### Advanced Orders (Private)
+//! - [`create_price_order`] - Create stop/trigger orders
+//! - [`get_price_orders`] - List active trigger orders
+//! - [`get_price_order`] - Get specific trigger order
+//! - [`cancel_price_order`] - Cancel trigger order
+//! - [`cancel_all_price_orders`] - Cancel all trigger orders
+//! - [`create_cross_liquidate_orders`] - Cross-currency liquidation
+//!
+//! ### Trading History (Private)
+//! - [`get_my_trades`] - Get personal trade history
+//! - [`get_insurance_history`] - Get insurance fund data
+//!
+//! ## Example Usage
+//!
+//! ```rust,no_run
+//! use gateio_rs::{
+//!     api::spot::{get_ticker, create_order},
+//!     http::Credentials,
+//!     ureq::GateHttpClient,
+//! };
+//!
+//! // Public API - no authentication needed
+//! let client = GateHttpClient::default();
+//! let ticker_req = get_ticker().currency_pair("BTC_USDT");
+//! let response = client.send(ticker_req)?;
+//!
+//! // Private API - requires authentication
+//! let credentials = Credentials::new("api_key", "api_secret");
+//! let client = GateHttpClient::default().credentials(credentials);
+//! let order_req = create_order("BTC_USDT", "buy", "0.001").price("50000");
+//! let response = client.send(order_req)?;
+//! # Ok::<(), Box<dyn std::error::Error>>(()).expect("");
+//! ```
+//!
+//! For detailed parameter documentation, see the [Gate.io API Documentation](https://www.gate.com/docs/developers/apiv4/#spot).
+
 pub mod amend_batch_orders;
 pub mod amend_order;
 pub mod cancel_all_open_orders;
@@ -94,7 +168,32 @@ pub fn get_currency_pair(currency_pair: &str) -> GetCurrencyPair {
     GetCurrencyPair::new(currency_pair)
 }
 
-/// Retrieve ticker information <br/>
+/// Retrieve ticker information for currency pairs.
+///
+/// Returns 24hr trading statistics including price, volume, and changes.
+/// Can be used to get data for a specific pair or all pairs at once.
+///
+/// # Parameters
+/// - `currency_pair`: Optional. Specific trading pair (e.g., "BTC_USDT")
+/// - `timezone`: Optional. Timezone for calculation ("utc0" to "utc12", "utc-12" to "utc-1")
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use gateio_rs::{api::spot::get_ticker, ureq::GateHttpClient};
+///
+/// let client = GateHttpClient::default();
+///
+/// // Get ticker for specific pair
+/// let request = get_ticker().currency_pair("BTC_USDT");
+/// let response = client.send(request)?;
+///
+/// // Get all tickers
+/// let request = get_ticker();
+/// let response = client.send(request)?;
+/// # Ok::<(), Box<dyn std::error::Error>>(()).expect("");
+/// ```
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#retrieve-ticker-information)
 pub fn get_ticker() -> GetTicker {
     GetTicker::new()
@@ -124,7 +223,39 @@ pub fn get_batch_user_fee(currency_pairs: &str) -> GetBatchUserFee {
     GetBatchUserFee::new(currency_pairs)
 }
 
-/// List spot accounts <br/>
+/// List spot account balances and information.
+///
+/// Returns account balances for all currencies in the spot trading account.
+/// Shows available balance, locked balance, and total balance for each currency.
+///
+/// # Authentication
+/// This endpoint requires API key authentication.
+///
+/// # Optional Parameters (via builder methods)
+/// - `currency`: Filter by specific currency (e.g., "BTC", "USDT")
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use gateio_rs::{
+///     api::spot::get_account,
+///     http::Credentials,
+///     ureq::GateHttpClient,
+/// };
+///
+/// let credentials = Credentials::new("api_key", "api_secret");
+/// let client = GateHttpClient::default().credentials(credentials);
+///
+/// // Get all account balances
+/// let request = get_account();
+/// let response = client.send(request)?;
+///
+/// // Get specific currency balance
+/// let request = get_account().currency("BTC");
+/// let response = client.send(request)?;
+/// # Ok::<(), Box<dyn std::error::Error>>(()).expect("");
+/// ```
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#list-spot-accounts)
 pub fn get_account() -> GetAccount {
     GetAccount::new()
@@ -142,7 +273,49 @@ pub fn get_open_orders() -> GetOpenOrders {
     GetOpenOrders::new()
 }
 
-/// Create an order <br/>
+/// Create a new trading order.
+///
+/// Places a buy or sell order on the specified trading pair. Supports various order types
+/// including market, limit, and immediate-or-cancel orders.
+///
+/// # Parameters
+/// - `currency_pair`: Trading pair (e.g., "BTC_USDT")
+/// - `side`: Order side ("buy" or "sell")
+/// - `amount`: Order amount in base currency
+///
+/// # Optional Parameters (via builder methods)
+/// - `price`: Order price (required for limit orders)
+/// - `order_type`: "limit", "market", "ioc", "poc", "fok" (default: "limit")
+/// - `account`: Account type ("spot", "margin", "cross_margin", "unified")
+/// - `time_in_force`: "gtc", "ioc", "poc", "fok" (default: "gtc")
+/// - `text`: Custom order ID for identification
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use gateio_rs::{
+///     api::spot::create_order,
+///     http::Credentials,
+///     ureq::GateHttpClient,
+/// };
+///
+/// let credentials = Credentials::new("api_key", "api_secret");
+/// let client = GateHttpClient::default().credentials(credentials);
+///
+/// // Limit buy order
+/// let request = create_order("BTC_USDT", "buy", "0.001")
+///     .price("50000")
+///     .order_type("limit")
+///     .time_in_force("gtc");
+/// let response = client.send(request)?;
+///
+/// // Market sell order
+/// let request = create_order("BTC_USDT", "sell", "0.001")
+///     .order_type("market");
+/// let response = client.send(request)?;
+/// # Ok::<(), Box<dyn std::error::Error>>(()).expect("");
+/// ```
+///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-an-order)
 pub fn create_order(currency_pair: &str, side: &str, amount: &str) -> CreateOrder {
     CreateOrder::new(currency_pair, side, amount)
