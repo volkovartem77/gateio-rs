@@ -190,7 +190,7 @@ impl CreatePriceOrder {
 
 impl From<CreatePriceOrder> for Request {
     fn from(request: CreatePriceOrder) -> Request {
-        let mut params = Vec::new();
+        let params = Vec::new();
         let mut payload = Map::new();
 
         // Add market (currency pair)
