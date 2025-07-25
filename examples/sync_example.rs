@@ -1,52 +1,92 @@
-use gateio_rs::api::spot::{
-    Order, create_batch_orders, create_order, get_account, get_account_book, get_batch_user_fee,
-    get_currency_pair, get_currency_pairs, get_ticker,
-};
-use gateio_rs::http::Credentials;
 use gateio_rs::{
-    ureq::GateHttpClient, // синхронный клиент на базе ureq
+    api::spot::{
+        create_batch_orders, create_order, get_account, get_account_book, get_batch_user_fee,
+        get_currency_pair, get_currency_pairs, get_ticker, Order,
+    },
+    http::Credentials,
+    ureq::GateHttpClient,
 };
-use serde_json::{Value, json};
+use serde_json::Value;
 
-fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1) Create Credentials
-    let api_key = "d0e1b2599c9e01315795a87cdc78224a";
-    let api_secret = "42f2a62f8f42059930fa96b8d4e0ccab26fcdc3862d2ae20b27ee6c9fe7e389f";
+    // TODO: Replace with your actual API credentials or use environment variables
+    let api_key = "YOUR_GATE_API_KEY";
+    let api_secret = "YOUR_GATE_API_SECRET";
     let credentials = Credentials::new(api_key.to_owned(), api_secret.to_owned());
 
     // 2) Configure Client
     let client = GateHttpClient::default().credentials(credentials);
 
-    // 3) Send sync request
-    // let req = get_ticker()
-    //     .currency_pair("BTC_USDT")
-    //     .timezone("utc8");
+    // 3) Send sync request examples
+    
+    // Example 1: Get ticker
+    println!("Getting ticker for BTC_USDT...");
+    let req = get_ticker()
+        .currency_pair("BTC_USDT")
+        .timezone("utc8");
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let ticker_data: Value = serde_json::from_str(&body)?;
+    println!("Ticker: {}\n", serde_json::to_string_pretty(&ticker_data)?);
 
-    // let req = get_account();//.currency("USDT");
-    // let req = get_ticker()
-    //     .currency_pair("BTC_USDT")
-    //     .timezone("utc8");
+    // Example 2: Get account information
+    println!("Getting account information...");
+    let req = get_account();
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let account_data: Value = serde_json::from_str(&body)?;
+    println!("Account: {}\n", serde_json::to_string_pretty(&account_data)?);
 
-    // POST запрос с параметрами
-    // let req = create_order("LTC_USDT", "buy", "0.04").price("84.2").x_gate_exp_time(1750133608123);
-    // let req = create_order("LTC_USDT", "buy", "0.04").price("84.2");
-    // let req = create_order("ADA_USDT", "buy", "6").price("0.51");
-    // let req = create_order("DUREV_USDT", "buy", "700").price("0.004336");
-    // let req = create_order("DUREV_USDT", "sell", "1400").order_type("market");
+    // Example 3: Get currency pairs
+    println!("Getting currency pairs...");
+    let req = get_currency_pairs();
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let pairs_data: Value = serde_json::from_str(&body)?;
+    println!("Found {} currency pairs\n", pairs_data.as_array().map(|a| a.len()).unwrap_or(0));
 
-    // let req = get_currency_pairs();
-    // let req = get_currency_pair("LTC_USDT");
+    // Example 4: Get specific currency pair
+    println!("Getting LTC_USDT currency pair info...");
+    let req = get_currency_pair("LTC_USDT");
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let pair_data: Value = serde_json::from_str(&body)?;
+    println!("LTC_USDT info: {}\n", serde_json::to_string_pretty(&pair_data)?);
 
-    // let req = cancel_order("860626791967", "ADA_USDT");
-    // let req = amend_order("862872836139", "ADA_USDT").price("0.53");
-    // let req = amend_order("863339248610", "DUREV_USDT").price("0.004337").amount("800");
-    // let req = cancel_order("862893921486", "DUREV_USDT");
+    // Example 5: Create order
+    println!("Creating order...");
+    let req = create_order("LTC_USDT", "buy", "0.04").price("84.2");
 
-    // let req = get_market_trades("ADA_USDT").last_id("15881638").reverse(true).limit(5);
-    // let req = get_batch_user_fee("BTC_USDT,ETH_USDT");
-    // let req = get_account_book().book_type("new_order");
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let order_data: Value = serde_json::from_str(&body)?;
+    println!("Order created: {}\n", serde_json::to_string_pretty(&order_data)?);
 
-    // Test batch orders
+    // Example 6: Batch user fee
+    println!("Getting batch user fee...");
+    let req = get_batch_user_fee("BTC_USDT,ETH_USDT");
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let fee_data: Value = serde_json::from_str(&body)?;
+    println!("Fees: {}\n", serde_json::to_string_pretty(&fee_data)?);
+
+    // Example 7: Account book
+    println!("Getting account book...");
+    let req = get_account_book().book_type("new_order");
+    
+    let resp = client.send(req)?;
+    let body = resp.into_body_str()?;
+    let book_data: Value = serde_json::from_str(&body)?;
+    println!("Account book: {}\n", serde_json::to_string_pretty(&book_data)?);
+
+    // Example 8: Batch orders
+    println!("Creating batch orders...");
     let order1 = Order::new("BTC_USDT", "buy", "0.001")
         .text("t-abc123")
         .order_type("limit")
@@ -67,13 +107,10 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     let req = create_batch_orders(orders);
 
     let resp = client.send(req)?;
-
-    // 4) Read response as String
     let body = resp.into_body_str()?;
-    // println!("{}", body);
+    let batch_data: Value = serde_json::from_str(&body)?;
+    println!("Batch orders: {}\n", serde_json::to_string_pretty(&batch_data)?);
 
-    let resp_obj: Value = serde_json::from_str(&body).unwrap();
-    println!("{:?}", resp_obj);
-
+    println!("All sync examples completed successfully!");
     Ok(())
 }

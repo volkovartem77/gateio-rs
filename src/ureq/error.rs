@@ -21,3 +21,18 @@ impl From<InvalidUri> for Box<Error> {
         Box::new(Error::Parse(err.into()))
     }
 }
+
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Error::Client(e) => write!(f, "Client error: {:?}", e),
+            Error::Server(e) => write!(f, "Server error: {:?}", e),
+            Error::InvalidApiSecret => write!(f, "Invalid API secret"),
+            Error::PayloadSerializationError => write!(f, "Payload serialization error"),
+            Error::Parse(e) => write!(f, "Parse error: {}", e),
+            Error::Send(e) => write!(f, "Send error: {}", e),
+        }
+    }
+}
+
+impl std::error::Error for Error {}

@@ -21,7 +21,7 @@ impl GetBatchUserFee {
 
 impl From<GetBatchUserFee> for Request {
     fn from(request: GetBatchUserFee) -> Request {
-        let mut params = vec![("currency_pairs".to_owned(), request.currency_pairs)];
+        let params = vec![("currency_pairs".to_owned(), request.currency_pairs)];
 
         Request {
             method: Method::Get,

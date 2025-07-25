@@ -1,12 +1,13 @@
 use crate::http::error::{ClientError, GateApiError, HttpError};
 use crate::hyper::Error;
-use hyper::Body;
 use std::collections::HashMap;
+use bytes::Bytes;
+use http_body_util::BodyExt;
 
 /// REST Response
 #[derive(Debug)]
 pub struct Response {
-    inner_response: hyper::Response<Body>,
+    inner_response: hyper::Response<http_body_util::combinators::BoxBody<Bytes, Box<dyn std::error::Error + Send + Sync>>>,
 }
 
 impl Response {
@@ -44,28 +45,38 @@ impl Response {
     }
 }
 
-impl From<hyper::Response<Body>> for Response {
-    fn from(response: hyper::Response<Body>) -> Response {
+impl<B> From<hyper::Response<B>> for Response 
+where
+    B: http_body::Body<Data = Bytes> + Send + Sync + 'static,
+    B::Error: Into<Box<dyn std::error::Error + Send + Sync>>,
+{
+    fn from(response: hyper::Response<B>) -> Response {
+        let (parts, body) = response.into_parts();
+        let boxed_body = body.map_err(|e| e.into()).boxed();
         Response {
-            inner_response: response,
+            inner_response: hyper::Response::from_parts(parts, boxed_body),
         }
     }
 }
 
-impl From<Response> for hyper::Response<Body> {
-    fn from(response: Response) -> hyper::Response<Body> {
-        response.inner_response
-    }
-}
 
-async fn hyper_body_to_string(body: Body) -> Result<String, Error> {
-    // Assume all Gate responses are of a reasonable size.
-    let body = hyper::body::to_bytes(body)
+async fn hyper_body_to_string<B>(body: B) -> Result<String, Error>
+where
+    B: http_body::Body + Send + 'static,
+    B::Data: Send,
+    B::Error: Into<Box<dyn std::error::Error + Send + Sync>>,
+{
+    use http_body_util::BodyExt;
+    
+    // Collect body bytes
+    let collected = body.collect()
         .await
-        .expect("Failed to collect response body.");
+        .map_err(|e| Error::Send(e.into()))?;
+    let bytes = collected.to_bytes();
 
-    // Assume all Gate responses are in UTF-8.
-    let content = String::from_utf8_lossy(body.to_vec()).expect("Response failed UTF-8 encoding.");
+    // Convert to string
+    let content = String::from_utf8(bytes.to_vec())
+        .map_err(|e| Error::Send(Box::new(e)))?;
 
     Ok(content)
 }
