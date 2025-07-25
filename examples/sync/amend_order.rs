@@ -11,7 +11,7 @@ fn main() -> Result<(), Box<gateio_rs::ureq::Error>> {
     let client = GateHttpClient::default().credentials(credentials.clone());
 
     // You need to replace with an actual order ID from your account
-    let req = spot::amend_order("876827967039", "DUREV_USDT")
+    let req = spot::amend_order("882949262345", "DUREV_USDT")
         // .amount("0.01")
         .price("0.0041");
         // .account("spot");

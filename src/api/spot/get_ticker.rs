@@ -1,5 +1,4 @@
 use crate::http::{Credentials, Method, request::Request};
-use serde_json::{Map, Value};
 
 pub struct GetTicker {
     pub currency_pair: Option<String>,

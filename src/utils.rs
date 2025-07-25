@@ -1,4 +1,3 @@
-use base64::Engine as _;
 use hmac::digest::Digest;
 use hmac::{Hmac, Mac};
 use sha2::Sha512;

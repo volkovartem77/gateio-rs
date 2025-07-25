@@ -1,38 +1,35 @@
 use crate::http::error::{ClientError, GateApiError, HttpError};
 use crate::ureq::Error;
 use std::collections::HashMap;
-use ureq::Response as UreqResponse;
+use ureq::Body;
 
 /// REST Response
 pub struct Response {
-    inner_response: UreqResponse,
+    inner_response: http::Response<Body>,
 }
 
 impl Response {
-    pub fn new(inner_response: UreqResponse) -> Self {
+    pub fn new(inner_response: http::Response<Body>) -> Self {
         Self { inner_response }
     }
 
     /// Fetch the data received from the API.
     pub fn into_body_str(self) -> Result<String, Box<Error>> {
-        let status = self.inner_response.status();
+        let status = self.inner_response.status().as_u16();
         if 400 <= status {
-            let headers: HashMap<String, String> = self.inner_response.headers_names().iter().fold(
+            let headers: HashMap<String, String> = self.inner_response.headers().iter().fold(
                 HashMap::new(),
-                |mut headers, k| {
-                    if let Some(header) = self.inner_response.header(k) {
-                        headers
-                            .entry(k.as_str().to_owned())
-                            .or_insert_with(|| header.to_owned());
-                    }
-
+                |mut headers, (k, v)| {
+                    headers
+                        .entry(k.as_str().to_owned())
+                        .or_insert_with(|| v.to_str().unwrap_or("").to_owned());
                     headers
                 },
             );
 
-            let content = self
-                .inner_response
-                .into_string()
+            let (_, mut body) = self.inner_response.into_parts();
+            let content = body
+                .read_to_string()
                 .expect("Response failed UTF-8 encoding.");
             if 500 <= status {
                 Err(Box::new(Error::Server(HttpError::new(
@@ -47,24 +44,24 @@ impl Response {
                 Err(Box::new(Error::Client(client_error)))
             }
         } else {
-            Ok(self
-                .inner_response
-                .into_string()
+            let (_, mut body) = self.inner_response.into_parts();
+            Ok(body
+                .read_to_string()
                 .expect("Response failed UTF-8 encoding."))
         }
     }
 }
 
-impl From<UreqResponse> for Response {
-    fn from(response: UreqResponse) -> Response {
+impl From<http::Response<Body>> for Response {
+    fn from(response: http::Response<Body>) -> Response {
         Response {
             inner_response: response,
         }
     }
 }
 
-impl From<Response> for UreqResponse {
-    fn from(response: Response) -> UreqResponse {
+impl From<Response> for http::Response<Body> {
+    fn from(response: Response) -> http::Response<Body> {
         response.inner_response
     }
 }

@@ -82,7 +82,7 @@ impl AmendOrder {
 
 impl From<AmendOrder> for Request {
     fn from(request: AmendOrder) -> Request {
-        let mut params = Vec::new();
+        let params = Vec::new();
         let mut payload = Map::new();
 
         payload.insert("currency_pair".to_string(), json!(request.currency_pair));

@@ -166,7 +166,7 @@ impl CreateOrder {
 
 impl From<CreateOrder> for Request {
     fn from(request: CreateOrder) -> Request {
-        let mut params = Vec::new();
+        let params = Vec::new();
         let mut payload = Map::new();
 
         payload.insert("currency_pair".to_string(), json!(request.currency_pair));

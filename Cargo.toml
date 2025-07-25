@@ -6,8 +6,8 @@ authors     = ["Artem Volkov"]
 description = "Короткое описание: что делает библиотека."
 license     = "MIT OR Apache-2.0"
 readme      = "README.md"
-repository  = "https://github.com/you/my_cool_lib"
-homepage    = "https://github.com/you/my_cool_lib"
+repository  = "https://github.com/volkovartem77/gateio-rs"
+homepage    = "https://github.com/volkovartem77/gateio-rs"
 keywords    = ["example", "template"]
 categories  = ["development-tools"]
 # TODO:
@@ -37,7 +37,7 @@ futures-util = {version = "0.3.31", optional = true }
 serde_json = { version = "1.0.140", optional = true }
 
 # enable-ureq
-ureq = { version = "2.4.0", optional = true }   # TODO: попробовать сделать для последней версии
+ureq = { version = "3.0.10", optional = true }
 
 anyhow = "1.0.98"
 hex = "0.4.3"
