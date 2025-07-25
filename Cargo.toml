@@ -8,7 +8,7 @@ license     = "MIT OR Apache-2.0"
 readme      = "README.md"
 repository  = "https://github.com/volkovartem77/gateio-rs"
 homepage    = "https://github.com/volkovartem77/gateio-rs"
-keywords    = ["gateio", "cryptocurrency", "exchange", "api", "trading"]
+keywords    = ["gateio", "exchange", "api", "trading", "crypto"]
 categories  = ["api-bindings", "web-programming::http-client"]
 
 [features]
