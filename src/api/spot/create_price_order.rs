@@ -18,12 +18,16 @@ use serde_json::{Map, Value, json};
 /// If not set, the order will remain active until manually cancelled
 #[derive(Debug, Clone)]
 pub struct SpotPriceTrigger {
+    /// Trigger price that will activate the order
     pub price: String,
+    /// Trigger rule ('>=' or '<=')
     pub rule: String,
+    /// Valid duration in seconds (optional)
     pub expiration: Option<i64>,
 }
 
 impl SpotPriceTrigger {
+    /// Create a new price trigger condition
     pub fn new(price: &str, rule: &str) -> Self {
         Self {
             price: price.to_owned(),
@@ -32,6 +36,7 @@ impl SpotPriceTrigger {
         }
     }
 
+    /// Set the trigger expiration time in seconds
     pub fn expiration(mut self, expiration: i64) -> Self {
         self.expiration = Some(expiration);
         self
@@ -70,15 +75,22 @@ impl SpotPriceTrigger {
 /// - "poc" : Post Only
 #[derive(Debug, Clone)]
 pub struct SpotPricePutOrder {
+    /// Order type (currently only "limit" supported)
     pub order_type: String,
+    /// Order side ("buy" or "sell")
     pub side: String,
+    /// Limit order price
     pub price: String,
+    /// Order amount/quantity
     pub amount: String,
+    /// Trading account type
     pub account: Option<String>,
+    /// Time in force for the triggered order
     pub time_in_force: Option<String>,
 }
 
 impl SpotPricePutOrder {
+    /// Create a new order to place when triggered
     pub fn new(order_type: &str, side: &str, price: &str, amount: &str) -> Self {
         Self {
             order_type: order_type.to_owned(),
@@ -90,11 +102,13 @@ impl SpotPricePutOrder {
         }
     }
 
+    /// Set the trading account type
     pub fn account(mut self, account: &str) -> Self {
         self.account = Some(account.to_owned());
         self
     }
 
+    /// Set the time in force for the triggered order
     pub fn time_in_force(mut self, time_in_force: &str) -> Self {
         self.time_in_force = Some(time_in_force.to_owned());
         self
@@ -125,14 +139,20 @@ impl SpotPricePutOrder {
 ///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#create-a-price-triggered-order)
 pub struct CreatePriceOrder {
+    /// Trigger conditions for the order
     pub trigger: SpotPriceTrigger,
+    /// Order details to execute when triggered
     pub put: SpotPricePutOrder,
+    /// Currency pair for the order
     pub market: String,
+    /// Request expiration time in milliseconds
     pub x_gate_exp_time: Option<u128>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl CreatePriceOrder {
+    /// Create a new price-triggered order request
     pub fn new(
         market: &str,
         trigger_price: &str,
@@ -150,26 +170,31 @@ impl CreatePriceOrder {
         }
     }
 
+    /// Set the trigger conditions
     pub fn trigger(mut self, trigger: SpotPriceTrigger) -> Self {
         self.trigger = trigger;
         self
     }
 
+    /// Set the order details to execute when triggered
     pub fn put(mut self, put: SpotPricePutOrder) -> Self {
         self.put = put;
         self
     }
 
+    /// Set the trigger expiration time in seconds
     pub fn trigger_expiration(mut self, expiration: i64) -> Self {
         self.trigger.expiration = Some(expiration);
         self
     }
 
+    /// Set the trading account type for the triggered order
     pub fn account(mut self, account: &str) -> Self {
         self.put.account = Some(account.to_owned());
         self
     }
 
+    /// Set the time in force for the triggered order
     pub fn time_in_force(mut self, time_in_force: &str) -> Self {
         self.put.time_in_force = Some(time_in_force.to_owned());
         self
@@ -182,6 +207,7 @@ impl CreatePriceOrder {
         self
     }
 
+    /// Set API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

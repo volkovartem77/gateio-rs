@@ -76,24 +76,40 @@ use serde_json::{Map, Value, json};
 /// - Be no longer than 28 bytes (excluding prefix)
 /// - Contain only: 0-9, A-Z, a-z, underscore, hyphen, or dot
 pub struct CreateOrder {
+    /// Custom order ID
     pub text: Option<String>,
+    /// Trading pair
     pub currency_pair: String,
+    /// Order type
     pub order_type: Option<String>,
+    /// Account type
     pub account: Option<String>,
+    /// Order side
     pub side: String,
+    /// Order amount
     pub amount: String,
+    /// Order price
     pub price: Option<String>,
+    /// Time in force
     pub time_in_force: Option<String>,
+    /// Iceberg amount
     pub iceberg: Option<String>,
+    /// Auto borrow funds
     pub auto_borrow: Option<bool>,
+    /// Auto repay borrowed
     pub auto_repay: Option<bool>,
+    /// Self-trade prevention
     pub stp_act: Option<String>,
+    /// Processing mode
     pub action_mode: Option<String>,
+    /// Request expiration time
     pub x_gate_exp_time: Option<u128>,
+    /// API credentials
     pub credentials: Option<Credentials>,
 }
 
 impl CreateOrder {
+    /// Create new order request
     pub fn new(currency_pair: &str, side: &str, amount: &str) -> Self {
         Self {
             text: None,
@@ -114,63 +130,73 @@ impl CreateOrder {
         }
     }
 
+    /// Set custom order ID
     pub fn text(mut self, text: &str) -> Self {
         self.text = Some(text.into());
         self
     }
 
+    /// Set order type
     pub fn order_type(mut self, order_type: &str) -> Self {
         self.order_type = Some(order_type.into());
         self
     }
 
+    /// Set account type
     pub fn account(mut self, account: &str) -> Self {
         self.account = Some(account.into());
         self
     }
 
+    /// Set order price
     pub fn price(mut self, price: &str) -> Self {
         self.price = Some(price.into());
         self
     }
 
+    /// Set time in force
     pub fn time_in_force(mut self, time_in_force: &str) -> Self {
         self.time_in_force = Some(time_in_force.into());
         self
     }
 
+    /// Set iceberg amount
     pub fn iceberg(mut self, iceberg: &str) -> Self {
         self.iceberg = Some(iceberg.into());
         self
     }
 
+    /// Enable auto borrow
     pub fn auto_borrow(mut self, auto_borrow: bool) -> Self {
         self.auto_borrow = Some(auto_borrow.into());
         self
     }
 
+    /// Enable auto repay
     pub fn auto_repay(mut self, auto_repay: bool) -> Self {
         self.auto_repay = Some(auto_repay.into());
         self
     }
 
+    /// Set self-trade prevention
     pub fn stp_act(mut self, stp_act: &str) -> Self {
         self.stp_act = Some(stp_act.into());
         self
     }
 
+    /// Set processing mode
     pub fn action_mode(mut self, action_mode: &str) -> Self {
         self.action_mode = Some(action_mode.into());
         self
     }
 
-    /// Specify the expiration time (milliseconds);<br/>
-    /// If the GATE receives the request time greater than the expiration time, the request will be rejected
+    /// Set expiration time
     pub fn x_gate_exp_time(mut self, x_gate_exp_time: u128) -> Self {
         self.x_gate_exp_time = Some(x_gate_exp_time.into());
         self
     }
 
+    /// Set API credentials
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

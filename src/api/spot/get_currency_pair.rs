@@ -1,11 +1,15 @@
 use crate::http::{Credentials, Method, request::Request};
 
+/// Request for retrieving information about a specific currency pair
 pub struct GetCurrencyPair {
+    /// Currency pair to get information for (e.g., "BTC_USDT")
     pub currency_pair: String,
+    /// API credentials for authentication (optional for public data)
     pub credentials: Option<Credentials>,
 }
 
 impl GetCurrencyPair {
+    /// Creates a new GetCurrencyPair request for the specified pair
     pub fn new(currency_pair: &str) -> Self {
         Self {
             currency_pair: currency_pair.to_owned(),
@@ -13,6 +17,7 @@ impl GetCurrencyPair {
         }
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

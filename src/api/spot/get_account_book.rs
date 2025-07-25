@@ -1,17 +1,27 @@
 use crate::http::{Credentials, Method, request::Request};
 
+/// Request for retrieving spot account transaction history
 pub struct GetAccountBook {
+    /// Currency to filter transactions by
     pub currency: Option<String>,
+    /// Start timestamp for transaction history range
     pub from: Option<i64>,
+    /// End timestamp for transaction history range
     pub to: Option<i64>,
+    /// Page number for pagination
     pub page: Option<i32>,
+    /// Maximum number of records to return per page
     pub limit: Option<i64>,
+    /// Type of account book entry to filter by
     pub book_type: Option<String>,
+    /// Specific transaction code to filter by
     pub code: Option<String>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl GetAccountBook {
+    /// Creates a new GetAccountBook request
     pub fn new() -> Self {
         Self {
             currency: None,
@@ -25,41 +35,49 @@ impl GetAccountBook {
         }
     }
 
+    /// Sets the currency filter for transaction history
     pub fn currency(mut self, currency: &str) -> Self {
         self.currency = Some(currency.into());
         self
     }
 
+    /// Sets the start timestamp for the date range filter
     pub fn from(mut self, from: i64) -> Self {
         self.from = Some(from.into());
         self
     }
 
+    /// Sets the end timestamp for the date range filter
     pub fn to(mut self, to: i64) -> Self {
         self.to = Some(to.into());
         self
     }
 
+    /// Sets the page number for pagination
     pub fn page(mut self, page: i32) -> Self {
         self.page = Some(page.into());
         self
     }
 
+    /// Sets the maximum number of records per page
     pub fn limit(mut self, limit: i64) -> Self {
         self.limit = Some(limit.into());
         self
     }
 
+    /// Sets the account book entry type filter
     pub fn book_type(mut self, book_type: &str) -> Self {
         self.book_type = Some(book_type.into());
         self
     }
 
+    /// Sets the transaction code filter
     pub fn code(mut self, code: &str) -> Self {
         self.code = Some(code.into());
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

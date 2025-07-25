@@ -1,14 +1,21 @@
 use crate::http::{Credentials, Method, request::Request};
 
+/// Request for retrieving order book data for a currency pair
 pub struct GetOrderbook {
+    /// Currency pair to get order book for
     pub currency_pair: String,
+    /// Price interval aggregation ("0" for no aggregation)
     pub interval: Option<String>,
+    /// Maximum depth of order book entries to return
     pub limit: Option<i64>,
+    /// Whether to return order IDs with the book data
     pub with_id: Option<bool>,
+    /// API credentials for authentication (optional for public data)
     pub credentials: Option<Credentials>,
 }
 
 impl GetOrderbook {
+    /// Creates a new GetOrderbook request for the specified currency pair
     pub fn new(currency_pair: &str) -> Self {
         Self {
             currency_pair: currency_pair.to_owned(),
@@ -19,21 +26,25 @@ impl GetOrderbook {
         }
     }
 
+    /// Sets the price interval for aggregation
     pub fn interval(mut self, interval: &str) -> Self {
         self.interval = Some(interval.into());
         self
     }
 
+    /// Sets the maximum depth of order book entries
     pub fn limit(mut self, limit: i64) -> Self {
         self.limit = Some(limit.into());
         self
     }
 
-    pub fn with_id(mut self, limit: bool) -> Self {
-        self.limit = Some(limit.into());
+    /// Sets whether to include order IDs in the response
+    pub fn with_id(mut self, with_id: bool) -> Self {
+        self.with_id = Some(with_id);
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

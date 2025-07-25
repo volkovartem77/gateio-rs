@@ -1,13 +1,19 @@
 use crate::http::{Credentials, Method, request::Request};
 
+/// Request for retrieving details of a specific order
 pub struct GetOrder {
+    /// Order ID to retrieve details for
     pub order_id: String,
+    /// Currency pair the order belongs to
     pub currency_pair: String,
+    /// Optional account type filter
     pub account: Option<String>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl GetOrder {
+    /// Creates a new GetOrder request with order ID and currency pair
     pub fn new(order_id: &str, currency_pair: &str) -> Self {
         Self {
             order_id: order_id.into(),
@@ -17,11 +23,13 @@ impl GetOrder {
         }
     }
 
+    /// Sets the account type filter
     pub fn account(mut self, account: &str) -> Self {
         self.account = Some(account.into());
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

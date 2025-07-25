@@ -22,6 +22,7 @@ pub struct HttpError<T> {
 }
 
 impl<T> HttpError<T> {
+    /// Creates a new HTTP error with status code, data, and headers
     pub fn new(status_code: u16, data: T, headers: HashMap<String, String>) -> Self {
         Self {
             status_code,

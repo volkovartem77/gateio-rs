@@ -1,11 +1,15 @@
 use crate::http::{Credentials, Method, request::Request};
 
+/// Request for retrieving trading fees for spot trading
 pub struct GetFee {
+    /// Optional currency pair to get specific trading fees for
     pub currency_pair: Option<String>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl GetFee {
+    /// Creates a new GetFee request
     pub fn new() -> Self {
         Self {
             currency_pair: None,
@@ -13,11 +17,13 @@ impl GetFee {
         }
     }
 
+    /// Sets the currency pair to get specific fees for
     pub fn currency_pair(mut self, currency_pair: &str) -> Self {
         self.currency_pair = Some(currency_pair.into());
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

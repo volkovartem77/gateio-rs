@@ -1,33 +1,30 @@
 use crate::http::{Credentials, Method, request::Request};
 use serde_json::{Map, Value, json};
 
-/// # Detailed descriptions
-/// ##### order_id:
-/// The order ID returned when the order was successfully created or the custom ID
-/// specified by the user's creation (i.e. the text field). <br/>
-/// Operations based on custom IDs can only be checked in pending orders.
-/// Only order ID can be used after the order is finished (transaction/cancel)
-///
-/// ##### action_mode:
-/// Processing Mode <br/>
-/// When placing an order, different fields are returned based on the action_mode
-/// - ACK: Asynchronous mode, returns only key order fields
-/// - RESULT: No clearing information
-/// - FULL: Full mode (default)
-///
+/// Order amendment request
 pub struct AmendOrder {
+    /// Order ID to amend
     pub order_id: String,
+    /// Trading pair
     pub currency_pair: String,
+    /// Account type
     pub account: Option<String>,
+    /// Order amount
     pub amount: Option<String>,
+    /// Order price
     pub price: Option<String>,
+    /// Custom amendment text
     pub amend_text: Option<String>,
+    /// Processing mode
     pub action_mode: Option<String>,
+    /// Request expiration time
     pub x_gate_exp_time: Option<u128>,
+    /// API credentials
     pub credentials: Option<Credentials>,
 }
 
 impl AmendOrder {
+    /// Create order amendment request
     pub fn new(order_id: &str, currency_pair: &str) -> Self {
         Self {
             order_id: order_id.to_owned(),
@@ -42,38 +39,43 @@ impl AmendOrder {
         }
     }
 
+    /// Set account type
     pub fn account(mut self, account: &str) -> Self {
         self.account = Some(account.into());
         self
     }
 
+    /// Set order amount
     pub fn amount(mut self, amount: &str) -> Self {
         self.amount = Some(amount.into());
         self
     }
 
+    /// Set order price
     pub fn price(mut self, price: &str) -> Self {
         self.price = Some(price.into());
         self
     }
 
+    /// Set amendment text
     pub fn amend_text(mut self, amend_text: &str) -> Self {
         self.amend_text = Some(amend_text.into());
         self
     }
 
+    /// Set processing mode
     pub fn action_mode(mut self, action_mode: &str) -> Self {
         self.action_mode = Some(action_mode.into());
         self
     }
 
-    /// Specify the expiration time (milliseconds);<br/>
-    /// If the GATE receives the request time greater than the expiration time, the request will be rejected
+    /// Set expiration time
     pub fn x_gate_exp_time(mut self, x_gate_exp_time: u128) -> Self {
         self.x_gate_exp_time = Some(x_gate_exp_time.into());
         self
     }
 
+    /// Set API credentials
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

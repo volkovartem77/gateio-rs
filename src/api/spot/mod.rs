@@ -72,38 +72,71 @@
 //!
 //! For detailed parameter documentation, see the [Gate.io API Documentation](https://www.gate.com/docs/developers/apiv4/#spot).
 
+/// Amend multiple orders in batch
 pub mod amend_batch_orders;
+/// Amend a single order
 pub mod amend_order;
+/// Cancel all open orders
 pub mod cancel_all_open_orders;
+/// Cancel all price orders
 pub mod cancel_all_price_orders;
+/// Cancel multiple orders in batch
 pub mod cancel_batch_orders;
+/// Cancel a single order
 pub mod cancel_order;
+/// Cancel a price order
 pub mod cancel_price_order;
+/// Set countdown timer to cancel all orders
 pub mod countdown_cancel_all;
+/// Create multiple orders in batch
 pub mod create_batch_orders;
+/// Create cross liquidate orders
 pub mod create_cross_liquidate_orders;
+/// Create a single order
 pub mod create_order;
+/// Create a price order
 pub mod create_price_order;
+/// Get account information
 pub mod get_account;
+/// Get account transaction history
 pub mod get_account_book;
+/// Get batch user fee rates
 pub mod get_batch_user_fee;
+/// Get candlestick data
 pub mod get_candlesticks;
+/// Get all supported currencies
 pub mod get_currencies;
+/// Get single currency information
 pub mod get_currency;
+/// Get currency pair details
 pub mod get_currency_pair;
+/// Get all currency pairs
 pub mod get_currency_pairs;
+/// Get trading fees
 pub mod get_fee;
+/// Get insurance fund history
 pub mod get_insurance_history;
+/// Get market trade history
 pub mod get_market_trades;
+/// Get user's trade history
 pub mod get_my_trades;
+/// Get open orders
 pub mod get_open_orders;
+/// Get single order details
 pub mod get_order;
+/// Get order book
 pub mod get_orderbook;
+/// Get order history
 pub mod get_orders;
+/// Get single price order
 pub mod get_price_order;
+/// Get price order history
 pub mod get_price_orders;
+/// Get server time
 pub mod get_server_time;
+/// Get ticker information
 pub mod get_ticker;
+/// Order data structures
 pub mod order;
 
 use get_account::GetAccount;

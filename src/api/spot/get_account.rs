@@ -1,11 +1,15 @@
 use crate::http::{Credentials, Method, request::Request};
 
+/// Request for retrieving spot account information
 pub struct GetAccount {
+    /// Optional currency filter to get balances for a specific currency
     pub currency: Option<String>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl GetAccount {
+    /// Creates a new GetAccount request
     pub fn new() -> Self {
         Self {
             currency: None,
@@ -13,11 +17,13 @@ impl GetAccount {
         }
     }
 
+    /// Sets the currency filter for the account query
     pub fn currency(mut self, currency: &str) -> Self {
         self.currency = Some(currency.into());
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

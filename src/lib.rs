@@ -41,7 +41,9 @@
 mod utils;
 mod version;
 
+/// Spot trading API endpoints
 pub mod api;
+/// HTTP client abstractions and utilities
 pub mod http;
 
 #[cfg(feature = "enable-hyper")]

@@ -65,10 +65,12 @@ pub struct GateHttpClient {
 }
 
 impl GateHttpClient {
+    /// Creates a new client with default settings and Gate.io production URL
     pub fn default() -> Self {
         Self::with_url("https://api.gateio.ws")
     }
 
+    /// Creates a new client with a custom base URL
     pub fn with_url(url: &str) -> Self {
         Self {
             client: Agent::config_builder().build().into(),
@@ -78,6 +80,7 @@ impl GateHttpClient {
         }
     }
 
+    /// Creates a new client with a custom ureq Agent and base URL
     pub fn with_custom_agent(agent: Agent, url: &str) -> Self {
         Self {
             client: agent,
@@ -87,16 +90,19 @@ impl GateHttpClient {
         }
     }
 
+    /// Sets the default API credentials for all requests
     pub fn credentials(mut self, credentials: Credentials) -> Self {
         self.credentials = Some(credentials);
         self
     }
 
+    /// Sets the timestamp delta to adjust for server time differences
     pub fn timestamp_delta(mut self, timestamp_delta: u64) -> Self {
         self.timestamp_delta = timestamp_delta;
         self
     }
 
+    /// Sends an HTTP request to the Gate.io API
     pub fn send<R: Into<Request>>(&self, request: R) -> Result<Response, Box<Error>> {
         let Request {
             method,
@@ -123,7 +129,7 @@ impl GateHttpClient {
         let user_agent = &format!("gateio-rs/{}", VERSION);
 
         // Create common headers
-        let mut headers = vec![
+        let headers = vec![
             ("User-Agent", user_agent.as_str()),
             ("Accept", "application/json"),
             ("Content-Type", "application/json"),

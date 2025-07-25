@@ -11,8 +11,11 @@ pub enum Error {
     Server(GateHttpError<String>),
     /// The format of the API secret is invalid.
     InvalidApiSecret,
+    /// Error serializing request payload to JSON
     PayloadSerializationError,
+    /// Error parsing HTTP request or response
     Parse(HttpError),
+    /// Error sending HTTP request
     Send(UreqError),
 }
 

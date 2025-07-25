@@ -11,11 +11,14 @@
 ///
 #[derive(PartialEq, Eq, Clone)]
 pub struct Credentials {
+    /// API key for authentication
     pub api_key: String,
+    /// API secret for HMAC signing
     pub api_secret: String,
 }
 
 impl Credentials {
+    /// Creates new API credentials
     pub fn new(api_key: impl Into<String>, api_secret: impl Into<String>) -> Self {
         Credentials {
             api_key: api_key.into(),

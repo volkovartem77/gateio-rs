@@ -13,13 +13,18 @@ use crate::http::{Credentials, Method, request::Request};
 ///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#cancel-all-price-triggered-orders)
 pub struct CancelAllPriceOrders {
+    /// Filter by currency pair (market)
     pub market: Option<String>,
+    /// Trading account type
     pub account: Option<String>,
+    /// Request expiration time in milliseconds
     pub x_gate_exp_time: Option<u128>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl CancelAllPriceOrders {
+    /// Create a new cancel all price orders request
     pub fn new() -> Self {
         Self {
             market: None,
@@ -51,6 +56,7 @@ impl CancelAllPriceOrders {
         self
     }
 
+    /// Set API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

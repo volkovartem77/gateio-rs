@@ -16,12 +16,16 @@ use crate::http::{Credentials, Method, request::Request};
 ///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#cancel-a-price-triggered-order)
 pub struct CancelPriceOrder {
+    /// Price-triggered order ID to cancel
     pub order_id: String,
+    /// Request expiration time in milliseconds
     pub x_gate_exp_time: Option<u128>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl CancelPriceOrder {
+    /// Create a new cancel price order request
     pub fn new(order_id: &str) -> Self {
         Self {
             order_id: order_id.to_owned(),
@@ -37,6 +41,7 @@ impl CancelPriceOrder {
         self
     }
 
+    /// Set API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

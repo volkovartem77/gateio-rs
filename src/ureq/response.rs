@@ -3,12 +3,13 @@ use crate::ureq::Error;
 use std::collections::HashMap;
 use ureq::Body;
 
-/// REST Response
+/// HTTP response wrapper for Gate.io API responses
 pub struct Response {
     inner_response: http::Response<Body>,
 }
 
 impl Response {
+    /// Creates a new Response from an HTTP response
     pub fn new(inner_response: http::Response<Body>) -> Self {
         Self { inner_response }
     }

@@ -39,12 +39,16 @@ use crate::http::{Credentials, Method, request::Request};
 /// - `high_24h`: 24hr highest price
 /// - `low_24h`: 24hr lowest price
 pub struct GetTicker {
+    /// Optional currency pair to get ticker for (if not specified, returns all tickers)
     pub currency_pair: Option<String>,
+    /// Timezone for the ticker data timestamps
     pub timezone: Option<String>,
+    /// API credentials for authentication (optional for public data)
     pub credentials: Option<Credentials>,
 }
 
 impl GetTicker {
+    /// Creates a new GetTicker request
     pub fn new() -> Self {
         Self {
             currency_pair: None,
@@ -53,16 +57,19 @@ impl GetTicker {
         }
     }
 
+    /// Sets the currency pair to get ticker for
     pub fn currency_pair(mut self, s: &str) -> Self {
         self.currency_pair = Some(s.into());
         self
     }
 
+    /// Sets the timezone for timestamp data
     pub fn timezone(mut self, tz: &str) -> Self {
         self.timezone = Some(tz.into());
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

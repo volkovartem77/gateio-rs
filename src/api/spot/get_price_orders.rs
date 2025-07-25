@@ -14,15 +14,22 @@ use crate::http::{Credentials, Method, request::Request};
 ///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#retrieve-running-auto-order-list)
 pub struct GetPriceOrders {
+    /// Order status filter
     pub status: Option<String>,
+    /// Currency pair (market) filter
     pub market: Option<String>,
+    /// Account type filter
     pub account: Option<String>,
+    /// Maximum number of records to return
     pub limit: Option<i32>,
+    /// Offset for pagination
     pub offset: Option<i32>,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl GetPriceOrders {
+    /// Creates a new GetPriceOrders request
     pub fn new() -> Self {
         Self {
             status: None,
@@ -72,6 +79,7 @@ impl GetPriceOrders {
         self
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self

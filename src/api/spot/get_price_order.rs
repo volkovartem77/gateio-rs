@@ -20,11 +20,14 @@ use crate::http::{Credentials, Method, request::Request};
 ///
 /// [Gate API Documentation](https://www.gate.com/docs/developers/apiv4/#get-a-price-triggered-order)
 pub struct GetPriceOrder {
+    /// Order ID of the price-triggered order to retrieve
     pub order_id: String,
+    /// API credentials for authentication
     pub credentials: Option<Credentials>,
 }
 
 impl GetPriceOrder {
+    /// Creates a new GetPriceOrder request with the specified order ID
     pub fn new(order_id: &str) -> Self {
         Self {
             order_id: order_id.to_owned(),
@@ -32,6 +35,7 @@ impl GetPriceOrder {
         }
     }
 
+    /// Sets the API credentials for authentication
     pub fn credentials(mut self, creds: Credentials) -> Self {
         self.credentials = Some(creds);
         self
